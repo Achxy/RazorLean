@@ -1,0 +1,42 @@
+{
+  "scope": "razorpay-test-mode",
+  "real_money": false,
+  "hosted_payments_captured": 2,
+  "payment_links_paid": 2,
+  "webhooks": {
+    "deliveries": 22,
+    "event_types": 6,
+    "all_signatures_valid": true,
+    "literal_non_ascii_deliveries": 16,
+    "exact_utf8_verified_all": true,
+    "dotnet_ascii_equivalent_verified_any": false
+  },
+  "fully_reconciled_fixture": {
+    "payment_amount": 801,
+    "amount_refunded": 801,
+    "refund_ledger_sum": 801,
+    "refund_count": 6,
+    "all_refunds_processed": true
+  },
+  "direct_test_control_plane_defect": {
+    "id": "RP-API-REFUND-FRACTIONAL-COERCION",
+    "requested_amount": 100.75,
+    "http_status": 200,
+    "persisted_amount": 100,
+    "final_status": "processed",
+    "bounded_by_negative_control": true
+  },
+  "provider_reachability_upgrade": {
+    "id": "RP-DOTNET-WEBHOOK-ASCII",
+    "from": "compatibility_defect",
+    "to": "defect",
+    "severity": "medium"
+  },
+  "negative_controls": {
+    "fractional_request_with_101_available_rejected": true,
+    "unkeyed_retries_are_distinct_intents": true,
+    "stable_header_is_idempotent": true,
+    "stable_receipt_prevents_duplicate": true
+  },
+  "redaction": "credentials, secret, raw bodies, signatures, contact data, and provider IDs omitted"
+}

@@ -1,0 +1,118 @@
+<!--
+Copyright (c) 2026 Achyuth Jayadevan <achyuth@jayadevan.in>
+SPDX-License-Identifier: MIT
+Licensed under the MIT License. See LICENSE in the repository root.
+-->
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#f2eee4">
+  <title>RazorProof — Semantic Payment Firewall</title>
+  <link rel="stylesheet" href="/assets/styles.css">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to proof</a>
+  <header class="shell masthead">
+    <div class="wordmark"><i class="mark" aria-hidden="true"></i>RazorProof</div>
+    <span class="descriptor">Semantic payment firewall</span>
+    <span class="mode" id="health-mode">Test only</span>
+  </header>
+  <main id="main">
+    <section class="shell hero">
+      <div>
+        <p class="eyebrow reveal">The correctness layer Razorpay integrations are missing</p>
+        <h1 class="reveal">Every rupee has a proof.</h1>
+        <p class="hero-copy reveal">One boundary that makes amount, identity, tenant, signature, retry, and fulfillment errors impossible to ignore — across every current Razorpay MCP operation.</p>
+        <div class="manifesto reveal"><strong>0</strong><span>silent economic mutations permitted beyond this boundary</span></div>
+      </div>
+      <aside class="scoreboard reveal" aria-label="Research and coverage totals">
+        <div class="score"><b>23</b><span>source findings</span></div>
+        <div class="score"><b>17</b><span>direct defects</span></div>
+        <div class="score"><b id="operation-count">113</b><span>guarded operations</span></div>
+        <div class="score"><b>6</b><span>failure chains</span></div>
+      </aside>
+    </section>
+
+    <section class="section">
+      <div class="shell">
+        <div class="section-head">
+          <div><span class="kicker">01 / Live fault laboratory</span><h2>Watch one paise disappear. Then stop it.</h2></div>
+          <p class="lead">The unsafe path executes the conversion emitted by the generator. RazorProof accepts an exact decimal string, applies the currency exponent, and emits a validated integer subunit — or no request at all.</p>
+        </div>
+        <div class="fault-lab">
+          <div class="fault-controls">
+            <div class="field"><label for="major">Major amount</label><input id="major" value="2.01" inputmode="decimal"></div>
+            <div class="field"><label for="currency">Currency</label><input id="currency" value="INR" maxlength="3"></div>
+            <button class="run" id="run-fault">Run both paths</button>
+          </div>
+          <div class="fault-grid" aria-live="polite">
+            <article class="lane" id="unsafe-lane">
+              <h3>Generated path <span>binary float → truncate</span></h3>
+              <div class="equation"><span id="unsafe-expression">int(2.01 × 100)</span> = <output class="breach" id="unsafe-output">—</output></div>
+              <p class="result-note" id="unsafe-note">Waiting for a counterexample.</p><div class="stamp breach">mutated</div>
+            </article>
+            <article class="lane" id="safe-lane">
+              <h3>RazorProof path <span>decimal → currency rule → integer</span></h3>
+              <div class="equation"><span id="safe-expression">exact(2.01, INR)</span> = <output class="sealed" id="safe-output">—</output></div>
+              <p class="result-note" id="safe-note">Waiting for the same input.</p><div class="stamp sealed">sealed</div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="shell section">
+      <div class="section-head">
+        <div><span class="kicker">02 / The boundary</span><h2>Five gates. One irreversible effect.</h2></div>
+        <p class="lead">A payment is not a JSON request. It is a state transition with an economic identity. Each gate removes a class of ambiguity before Razorpay Test Mode is touched.</p>
+      </div>
+      <div class="pipeline">
+        <article class="gate"><h3>Value</h3><p>Exact integer subunits, currency exponent, quantum, safe JSON range.</p></article>
+        <article class="gate"><h3>Authority</h3><p>Server-issued quote binds catalog lines, total, currency, expiry, and cart hash.</p></article>
+        <article class="gate"><h3>Identity</h3><p>Tenant-owned effect ID locks operation and canonical request hash.</p></article>
+        <article class="gate"><h3>Provider</h3><p>Immutable credentials and submerchant routing; writes never retry ambiguously.</p></article>
+        <article class="gate"><h3>Proof</h3><p>Raw-byte HMAC, provider re-fetch, fulfillment state, hash-chained evidence.</p></article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="shell">
+        <div class="section-head">
+          <div><span class="kicker">03 / Real surface</span><h2>Connect the local control room.</h2></div>
+          <p class="lead">The token stays in this browser session. Provider secrets never enter the page. Once connected, the ledger exposes fingerprints and state transitions — not customer payloads.</p>
+        </div>
+        <div class="proof-grid">
+          <aside class="connection">
+            <form id="connection-form">
+              <div class="field"><label for="tenant">Tenant</label><input id="tenant" value="hackathon_demo" autocomplete="off"></div>
+              <div class="field"><label for="token">Gateway token</label><input id="token" type="password" autocomplete="off"></div>
+              <div class="actions"><button class="run" type="submit">Connect evidence</button><button class="secondary" type="button" id="forget">Forget token</button></div>
+              <p class="status-line" id="connection-status" role="status" aria-live="polite" aria-atomic="true">Health probe pending.</p>
+            </form>
+          </aside>
+          <div class="ledger" aria-live="polite">
+            <div class="ledger-head"><span>Time</span><span>Invariant event</span><span>Chain head</span></div>
+            <div id="events"><p class="empty">Connect to read the tamper-evident trail.</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="shell section">
+      <div class="section-head">
+        <div><span class="kicker">04 / Coverage compiler</span><h2>Policy for the whole surface, not a polished happy path.</h2></div>
+        <p class="lead">The build fails when the upstream MCP tool set drifts. Its 45 tools plus customers, subscriptions, invoices, items, virtual accounts, Route, disputes, and partner onboarding resolve through one versioned 113-operation catalog.</p>
+      </div>
+      <div class="coverage">
+        <table><caption class="sr-only">RazorProof operation policies by provider surface, access, effect, and identity rule</caption><thead><tr><th scope="col">Operation</th><th scope="col">Surface</th><th scope="col">Access</th><th scope="col">Effect</th><th scope="col">Identity</th></tr></thead><tbody id="coverage-body"><tr><td colspan="5">Connect to load the versioned policy catalog.</td></tr></tbody></table>
+      </div>
+    </section>
+  </main>
+  <footer class="shell"><span>RazorProof 0.1 / Rust / test-only fail-closed build</span><span>No live credentials. No browser-authored economics. No silent retry.</span></footer>
+  <script src="/assets/app.js" defer></script>
+</body>
+</html>

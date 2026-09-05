@@ -1,0 +1,733 @@
+{
+  "generated_at": 1788476063,
+  "root": "../.razorproof/repos",
+  "files_scanned": 662,
+  "bytes_scanned": 2683730,
+  "findings": [
+    {
+      "id": "RP-DOTNET-GCM-NONCE-REUSE",
+      "title": ".NET onboarding encryption derives a reusable AES-GCM nonce from the key",
+      "repository": "razorpay-dot-net",
+      "invariant": "An AES-GCM key and nonce pair must never be reused.",
+      "severity": "critical",
+      "claim_kind": "defect",
+      "evidence": [
+        {
+          "path": "razorpay-dot-net/src/Utils.cs",
+          "line": 104,
+          "matched": "Array.Copy(keyBytes, 0, iv, 0, 12);",
+          "source_hash": "6a439b84a953e50d1158608825c9f1a79cf053995f789f38bf5f0900b0abda80"
+        }
+      ],
+      "remediation": "Generate a fresh random 96-bit nonce for every encryption and carry it with the ciphertext."
+    },
+    {
+      "id": "RP-DOTNET-GLOBAL-AUTH-STATE",
+      "title": ".NET client instances share process-wide credential state",
+      "repository": "razorpay-dot-net",
+      "invariant": "Credentials and routing headers must be immutable per client instance.",
+      "severity": "high",
+      "claim_kind": "defect",
+      "evidence": [
+        {
+          "path": "razorpay-dot-net/src/RazorpayClient.cs",
+          "line": 15,
+          "matched": "private static string key = null;",
+          "source_hash": "f407eb509044d61003ae549c064f4c0c09ee25cdec062df06cce59c19a895a5a"
+        },
+        {
+          "path": "razorpay-dot-net/src/RestClient.cs",
+          "line": 95,
+          "matched": "if (RazorpayClient.Key != null)",
+          "source_hash": "a3c73a0a7a9177ec28779bdcab512c66b97fe07f067c25275c7230281bee3f76"
+        },
+        {
+          "path": "razorpay-dot-net/src/RestClient.cs",
+          "line": 97,
+          "matched": "return \"Basic \" + Convert.ToBase64String(Encoding.UTF8.GetBytes(RazorpayClient.Key));",
+          "source_hash": "a3c73a0a7a9177ec28779bdcab512c66b97fe07f067c25275c7230281bee3f76"
+        },
+        {
+          "path": "razorpay-dot-net/src/RestClient.cs",
+          "line": 103,
+          "matched": "if (RazorpayClient.Key != null && RazorpayClient.Secret != null)",
+          "source_hash": "a3c73a0a7a9177ec28779bdcab512c66b97fe07f067c25275c7230281bee3f76"
+        },
+        {
+          "path": "razorpay-dot-net/src/RestClient.cs",
+          "line": 105,
+          "matched": "string authString = string.Format(\"{0}:{1}\", RazorpayClient.Key, RazorpayClient.Secret);",
+          "source_hash": "a3c73a0a7a9177ec28779bdcab512c66b97fe07f067c25275c7230281bee3f76"
+        }
+      ],
+      "remediation": "Move credentials and headers into immutable instance state and inject them into each request."
+    },
+    {
+      "id": "RP-JAVA-GLOBAL-PARTNER-HEADERS",
+      "title": "Java clients share one process-wide partner-routing map",
+      "repository": "razorpay-java",
+      "invariant": "Submerchant routing must be immutable per client and cannot bleed across tenants.",
+      "severity": "high",
+      "claim_kind": "defect",
+      "evidence": [
+        {
+          "path": "razorpay-java/src/main/java/com/razorpay/ApiUtils.java",
+          "line": 33,
+          "matched": "private static Map<String, String> headers = new HashMap<String, String>();",
+          "source_hash": "5da8cda520d8e1f7916b0d3a20b4383080c480e32d4a3a0144358ad2be088876"
+        },
+        {
+          "path": "razorpay-java/src/main/java/com/razorpay/RazorpayClient.java",
+          "line": 81,
+          "matched": "ApiUtils.addHeaders(headers);",
+          "source_hash": "f135ead44fc1882e1c3cc7e0a7ae3942ff3a52d9d53a37619bdd73bd5249e26e"
+        }
+      ],
+      "remediation": "Construct request-local headers from immutable client-owned partner context."
+    },
+    {
+      "id": "RP-MCP-GENERATOR-CURRENCY-EXPONENT",
+      "title": "Generated checkout hard-codes a two-decimal currency exponent",
+      "repository": "razorpay-mcp-server",
+      "invariant": "Currency exponent and provider quantum are properties of the currency, not a universal constant.",
+      "severity": "high",
+      "claim_kind": "defect",
+      "evidence": [
+        {
+          "path": "razorpay-mcp-server/pkg/razorpay/integrations/backend_node.go",
+          "line": 30,
+          "matched": "const { amount, currency = 'INR', receipt } = req.body;",
+          "source_hash": "496f37dd7edec55094f6e8fcad982c337e6bb81afec2b62c1f0af61cd5d371bf"
+        },
+        {
+          "path": "razorpay-mcp-server/pkg/razorpay/integrations/backend_node.go",
+          "line": 37,
+          "matched": "amount: Math.round(amount * 100), // Convert to paise",
+          "source_hash": "496f37dd7edec55094f6e8fcad982c337e6bb81afec2b62c1f0af61cd5d371bf"
+        },
+        {
+          "path": "razorpay-mcp-server/pkg/razorpay/integrations/backend_node.go",
+          "line": 368,
+          "matched": "const { amount, currency = 'INR', receipt } = await request.json();",
+          "source_hash": "496f37dd7edec55094f6e8fcad982c337e6bb81afec2b62c1f0af61cd5d371bf"
+        },
+        {
+          "path": "razorpay-mcp-server/pkg/razorpay/integrations/backend_node.go",
+          "line": 375,
+          "matched": "amount: Math.round(amount * 100),",
+          "source_hash": "496f37dd7edec55094f6e8fcad982c337e6bb81afec2b62c1f0af61cd5d371bf"
+        },
+        {
+          "path": "razorpay-mcp-server/pkg/razorpay/integrations/backend_node.go",
+          "line": 594,
+          "matched": "const { amount, currency = 'INR', receipt } = request.body;",
+          "source_hash": "496f37dd7edec55094f6e8fcad982c337e6bb81afec2b62c1f0af61cd5d371bf"
+        },
+        {
+          "path": "razorpay-mcp-server/pkg/razorpay/integrations/backend_node.go",
+          "line": 601,
+          "matched": "amount: Math.round(amount * 100),",
+          "source_hash": "496f37dd7edec55094f6e8fcad982c337e6bb81afec2b62c1f0af61cd5d371bf"
+        },
+        {
+          "path": "razorpay-mcp-server/pkg/razorpay/integrations/backend_node.go",
+          "line": 706,
+          "matched": "const { amount, currency = 'INR', receipt } = ctx.request.body;",
+          "source_hash": "496f37dd7edec55094f6e8fcad982c337e6bb81afec2b62c1f0af61cd5d371bf"
+        },
+        {
+          "path": "razorpay-mcp-server/pkg/razorpay/integrations/backend_node.go",
+          "line": 715,
+          "matched": "amount: Math.round(amount * 100),",
+          "source_hash": "496f37dd7edec55094f6e8fcad982c337e6bb81afec2b62c1f0af61cd5d371bf"
+        },
+        {
+          "path": "razorpay-mcp-server/pkg/razorpay/integrations/backend_node.go",
+          "line": 828,
+          "matched": "const { amount, currency = 'INR', receipt } = await readBody(event);",
+          "source_hash": "496f37dd7edec55094f6e8fcad982c337e6bb81afec2b62c1f0af61cd5d371bf"
+        },
+        {
+          "path": "razorpay-mcp-server/pkg/razorpay/integrations/backend_node.go",
+          "line": 835,
+          "matched": "amount: Math.round(amount * 100),",
+          "source_hash": "496f37dd7edec55094f6e8fcad982c337e6bb81afec2b62c1f0af61cd5d371bf"
+        }
+      ],
+      "remediation": "Resolve exponent and quantum from an audited currency table and reject unsupported precision."
+    },
+    {
+      "id": "RP-MCP-GENERATOR-MONEY-UNDERCHARGE",
+      "title": "Generated checkout backends convert binary floating point money by truncation",
+      "repository": "razorpay-mcp-server",
+      "invariant": "Major-to-minor conversion must be decimal-exact and must produce an integer.",
+      "severity": "high",
+      "claim_kind": "defect",
+      "evidence": [
+        {
+          "path": "razorpay-mcp-server/pkg/razorpay/integrations/backend_go.go",
+          "line": 58,
+          "matched": "\"amount\":   int(req.Amount * 100),",
+          "source_hash": "80253e985d99f0f425972c43fb29abde8a468d4f80426e70d76bac0135291325"
+        },
+        {
+          "path": "razorpay-mcp-server/pkg/razorpay/integrations/backend_go.go",
+          "line": 192,
+          "matched": "data := map[string]interface{}{\"amount\": int(req.Amount * 100), \"currency\": req.Currency, \"receipt\": req.Receipt}",
+          "source_hash": "80253e985d99f0f425972c43fb29abde8a468d4f80426e70d76bac0135291325"
+        },
+        {
+          "path": "razorpay-mcp-server/pkg/razorpay/integrations/backend_go.go",
+          "line": 312,
+          "matched": "data := map[string]interface{}{\"amount\": int(req.Amount * 100), \"currency\": req.Currency, \"receipt\": req.Receipt}",
+          "source_hash": "80253e985d99f0f425972c43fb29abde8a468d4f80426e70d76bac0135291325"
+        },
+        {
+          "path": "razorpay-mcp-server/pkg/razorpay/integrations/backend_java.go",
+          "line": 48,
+          "matched": "orderRequest.put(\"amount\", (int) (amount * 100));",
+          "source_hash": "e1c7ef3c339942bc94fa5a9cec0c45654da93b584bc59fa384b7544fd274479c"
+        },
+        {
+          "path": "razorpay-mcp-server/pkg/razorpay/integrations/backend_java.go",
+          "line": 202,
+          "matched": "orderRequest.put(\"amount\", (int) (amount * 100));",
+          "source_hash": "e1c7ef3c339942bc94fa5a9cec0c45654da93b584bc59fa384b7544fd274479c"
+        },
+        {
+          "path": "razorpay-mcp-server/pkg/razorpay/integrations/backend_other.go",
+          "line": 154,
+          "matched": "amount: (amount * 100).to_i,",
+          "source_hash": "3df9a74386288e829c820c153f436dde26d17583786af5e506971211401a7b1f"
+        },
+        {
+          "path": "razorpay-mcp-server/pkg/razorpay/integrations/backend_python.go",
+          "line": 28,
+          "matched": "'amount': int(amount * 100),  # Convert to paise",
+          "source_hash": "857d96d81ca62242a1ee3991c5bdd4ad9cfc2ad85b4411118ba42c0acd17f8d6"
+        },
+        {
+          "path": "razorpay-mcp-server/pkg/razorpay/integrations/backend_python.go",
+          "line": 313,
+          "matched": "'amount': int(amount * 100),",
+          "source_hash": "857d96d81ca62242a1ee3991c5bdd4ad9cfc2ad85b4411118ba42c0acd17f8d6"
+        }
+      ],
+      "remediation": "Accept integer subunits or exact decimal strings and convert with a currency-aware decimal type."
+    },
+    {
+      "id": "RP-MCP-GENERATOR-UNTRUSTED-ECONOMICS",
+      "title": "Generated checkout lets the browser author the order amount",
+      "repository": "razorpay-mcp-server",
+      "invariant": "The merchant server must derive amount, currency, and cart identity from trusted catalog state.",
+      "severity": "high",
+      "claim_kind": "defect",
+      "evidence": [
+        {
+          "path": "razorpay-mcp-server/pkg/razorpay/integrations/backend_node.go",
+          "line": 30,
+          "matched": "const { amount, currency = 'INR', receipt } = req.body;",
+          "source_hash": "496f37dd7edec55094f6e8fcad982c337e6bb81afec2b62c1f0af61cd5d371bf"
+        },
+        {
+          "path": "razorpay-mcp-server/pkg/razorpay/integrations/backend_node.go",
+          "line": 368,
+          "matched": "const { amount, currency = 'INR', receipt } = await request.json();",
+          "source_hash": "496f37dd7edec55094f6e8fcad982c337e6bb81afec2b62c1f0af61cd5d371bf"
+        },
+        {
+          "path": "razorpay-mcp-server/pkg/razorpay/integrations/backend_node.go",
+          "line": 594,
+          "matched": "const { amount, currency = 'INR', receipt } = request.body;",
+          "source_hash": "496f37dd7edec55094f6e8fcad982c337e6bb81afec2b62c1f0af61cd5d371bf"
+        },
+        {
+          "path": "razorpay-mcp-server/pkg/razorpay/integrations/backend_node.go",
+          "line": 706,
+          "matched": "const { amount, currency = 'INR', receipt } = ctx.request.body;",
+          "source_hash": "496f37dd7edec55094f6e8fcad982c337e6bb81afec2b62c1f0af61cd5d371bf"
+        },
+        {
+          "path": "razorpay-mcp-server/pkg/razorpay/integrations/backend_node.go",
+          "line": 828,
+          "matched": "const { amount, currency = 'INR', receipt } = await readBody(event);",
+          "source_hash": "496f37dd7edec55094f6e8fcad982c337e6bb81afec2b62c1f0af61cd5d371bf"
+        },
+        {
+          "path": "razorpay-mcp-server/pkg/razorpay/integrations/frontend_templates.go",
+          "line": 44,
+          "matched": "body: JSON.stringify({ amount }),",
+          "source_hash": "7b468708eb4c1923341b35623f40f468c55d15dabf8dbeabcefa92fcb1f69dc5"
+        },
+        {
+          "path": "razorpay-mcp-server/pkg/razorpay/integrations/frontend_templates.go",
+          "line": 110,
+          "matched": "body: JSON.stringify({ amount }),",
+          "source_hash": "7b468708eb4c1923341b35623f40f468c55d15dabf8dbeabcefa92fcb1f69dc5"
+        },
+        {
+          "path": "razorpay-mcp-server/pkg/razorpay/integrations/frontend_templates.go",
+          "line": 328,
+          "matched": "body: JSON.stringify({ amount }),",
+          "source_hash": "7b468708eb4c1923341b35623f40f468c55d15dabf8dbeabcefa92fcb1f69dc5"
+        }
+      ],
+      "remediation": "Replace browser-authored prices with a short-lived, server-valued quote bound to the provider order."
+    },
+    {
+      "id": "RP-MCP-MOBILE-DEPENDENCY-CONFUSION",
+      "title": "Generated mobile setup installs a non-official package identity",
+      "repository": "razorpay-mcp-server",
+      "invariant": "Payment code generators must pin packages controlled and documented by the provider.",
+      "severity": "high",
+      "claim_kind": "defect",
+      "evidence": [
+        {
+          "path": "razorpay-mcp-server/pkg/razorpay/integrations/mobile.go",
+          "line": 843,
+          "matched": "Dependencies:     []Dependency{{Name: \"razorpay-cordova\", InstallCommand: \"cordova plugin add com.nicholaswilliams.nicepay.razorpay\"}},",
+          "source_hash": "b20a751585befef09934085631929660a8f0cf53aa784372819a9c2086e640f8"
+        },
+        {
+          "path": "razorpay-mcp-server/pkg/razorpay/integrations/mobile.go",
+          "line": 849,
+          "matched": "1) Install plugin: cordova plugin add com.nicholaswilliams.nicepay.razorpay",
+          "source_hash": "b20a751585befef09934085631929660a8f0cf53aa784372819a9c2086e640f8"
+        },
+        {
+          "path": "razorpay-mcp-server/pkg/razorpay/integrations/mobile.go",
+          "line": 1018,
+          "matched": "{Name: \"razorpay-cordova\", InstallCommand: \"ionic cordova plugin add com.nicholaswilliams.nicepay.razorpay\"},",
+          "source_hash": "b20a751585befef09934085631929660a8f0cf53aa784372819a9c2086e640f8"
+        },
+        {
+          "path": "razorpay-mcp-server/pkg/razorpay/integrations/mobile.go",
+          "line": 1025,
+          "matched": "1) Install plugin: ionic cordova plugin add com.nicholaswilliams.nicepay.razorpay",
+          "source_hash": "b20a751585befef09934085631929660a8f0cf53aa784372819a9c2086e640f8"
+        },
+        {
+          "path": "razorpay-mcp-server/pkg/razorpay/integrations/mobile.go",
+          "line": 1222,
+          "matched": "{Name: \"razorpay-cordova\", InstallCommand: \"npm install cordova-plugin-razorpay && npx cap sync\"},",
+          "source_hash": "b20a751585befef09934085631929660a8f0cf53aa784372819a9c2086e640f8"
+        },
+        {
+          "path": "razorpay-mcp-server/pkg/razorpay/integrations/mobile.go",
+          "line": 1229,
+          "matched": "1) Install Cordova plugin: npm install cordova-plugin-razorpay",
+          "source_hash": "b20a751585befef09934085631929660a8f0cf53aa784372819a9c2086e640f8"
+        },
+        {
+          "path": "razorpay-mcp-server/pkg/razorpay/integrations/mobile.go",
+          "line": 1243,
+          "matched": "✅ Did you INSTALL cordova-plugin-razorpay and run npx cap sync?",
+          "source_hash": "b20a751585befef09934085631929660a8f0cf53aa784372819a9c2086e640f8"
+        }
+      ],
+      "remediation": "Generate only the official package coordinates and continuously verify their publisher and registry state."
+    },
+    {
+      "id": "RP-MCP-MOBILE-MISSING-SIGNATURE",
+      "title": "Generated mobile success paths discard the payment signature",
+      "repository": "razorpay-mcp-server",
+      "invariant": "Every client success callback must pass the payment, order, and signature tuple to server verification.",
+      "severity": "high",
+      "claim_kind": "defect",
+      "evidence": [
+        {
+          "path": "razorpay-mcp-server/pkg/razorpay/integrations/mobile.go",
+          "line": 407,
+          "matched": "put(\"razorpay_signature\", \"\")",
+          "source_hash": "b20a751585befef09934085631929660a8f0cf53aa784372819a9c2086e640f8"
+        },
+        {
+          "path": "razorpay-mcp-server/pkg/razorpay/integrations/mobile.go",
+          "line": 623,
+          "matched": "\"razorpay_signature\": \"\"",
+          "source_hash": "b20a751585befef09934085631929660a8f0cf53aa784372819a9c2086e640f8"
+        }
+      ],
+      "remediation": "Use SDK success objects that contain the full signed tuple and fail closed when any field is absent."
+    },
+    {
+      "id": "RP-PHP-GLOBAL-AUTH-STATE",
+      "title": "PHP client instances share process-wide credentials and headers",
+      "repository": "razorpay-php",
+      "invariant": "Credentials and routing headers must be immutable per client instance.",
+      "severity": "high",
+      "claim_kind": "defect",
+      "evidence": [
+        {
+          "path": "razorpay-php/src/Api.php",
+          "line": 9,
+          "matched": "protected static $key = null;",
+          "source_hash": "20d5aa0f621e21723ad1076f50dd1990c6937845dec821d0f6f86a01180bc607"
+        },
+        {
+          "path": "razorpay-php/src/Request.php",
+          "line": 69,
+          "matched": "$options['auth'] = array(Api::getKey(), Api::getSecret());",
+          "source_hash": "861b07e7c3dac39f0f8833499a1c4160d4476d6b878c1d933800414923a3ec31"
+        }
+      ],
+      "remediation": "Use instance-owned authentication and request headers without static mutation."
+    },
+    {
+      "id": "RP-DOTNET-WEBHOOK-ASCII",
+      "title": ".NET webhook verifier hashes Unicode payloads as ASCII",
+      "repository": "razorpay-dot-net",
+      "invariant": "Webhook HMAC verification must hash the exact UTF-8 bytes received from the network.",
+      "severity": "medium",
+      "claim_kind": "defect",
+      "evidence": [
+        {
+          "path": "razorpay-dot-net/src/Utils.cs",
+          "line": 135,
+          "matched": "var encoding = new ASCIIEncoding();",
+          "source_hash": "6a439b84a953e50d1158608825c9f1a79cf053995f789f38bf5f0900b0abda80"
+        }
+      ],
+      "remediation": "Accept raw bytes; if a string boundary is unavoidable, use strict UTF-8 without reserialization."
+    },
+    {
+      "id": "RP-JAVA-UPLOAD-DUPLICATE-FILE-PART",
+      "title": "Java document upload emits two conflicting file parts",
+      "repository": "razorpay-java",
+      "invariant": "A document multipart request contains exactly one binary file part.",
+      "severity": "medium",
+      "claim_kind": "defect",
+      "evidence": [
+        {
+          "path": "razorpay-java/src/main/java/com/razorpay/ApiUtils.java",
+          "line": 256,
+          "matched": "multipartBodyBuilder.addFormDataPart(\"file\",fileName, fileBody);",
+          "source_hash": "5da8cda520d8e1f7916b0d3a20b4383080c480e32d4a3a0144358ad2be088876"
+        },
+        {
+          "path": "razorpay-java/src/main/java/com/razorpay/ApiUtils.java",
+          "line": 258,
+          "matched": "Iterator<?> iterator = requestObject.keys();",
+          "source_hash": "5da8cda520d8e1f7916b0d3a20b4383080c480e32d4a3a0144358ad2be088876"
+        }
+      ],
+      "remediation": "Remove the file key before serializing scalar form fields and emit one binary part."
+    },
+    {
+      "id": "RP-JAVA-UPLOAD-MIME",
+      "title": "Java document upload maps image extensions to an invalid PDF MIME",
+      "repository": "razorpay-java",
+      "invariant": "Multipart Content-Type must match both the extension and file magic bytes.",
+      "severity": "medium",
+      "claim_kind": "defect",
+      "evidence": [
+        {
+          "path": "razorpay-java/src/main/java/com/razorpay/ApiUtils.java",
+          "line": 242,
+          "matched": "if(extenionName == \"jpg\" | extenionName == \"jpeg\" | extenionName == \"png\" | extenionName == \"jfif\"){",
+          "source_hash": "5da8cda520d8e1f7916b0d3a20b4383080c480e32d4a3a0144358ad2be088876"
+        },
+        {
+          "path": "razorpay-java/src/main/java/com/razorpay/ApiUtils.java",
+          "line": 245,
+          "matched": "return \"image/pdf\";",
+          "source_hash": "5da8cda520d8e1f7916b0d3a20b4383080c480e32d4a3a0144358ad2be088876"
+        }
+      ],
+      "remediation": "Use value equality and map JPEG, PNG, and PDF magic bytes to the exact allowed MIME."
+    },
+    {
+      "id": "RP-MCP-EXPAND-COLLAPSE",
+      "title": "Repeated expand query parameters collapse into one value",
+      "repository": "razorpay-mcp-server",
+      "invariant": "A repeated query parameter must retain every caller-supplied value.",
+      "severity": "medium",
+      "claim_kind": "defect",
+      "evidence": [
+        {
+          "path": "razorpay-mcp-server/pkg/razorpay/tools_params.go",
+          "line": 265,
+          "matched": "params[\"expand[]\"] = val",
+          "source_hash": "14bd95f439671fd8f81e5514fa94e6a6259aab4a1cb0039f210ac5484b5fdb5b"
+        }
+      ],
+      "remediation": "Represent repeated parameters as a multi-value query and append rather than overwrite."
+    },
+    {
+      "id": "RP-MCP-REFUND-IDEMPOTENCY",
+      "title": "Refund tool does not expose Razorpay's refund idempotency identity",
+      "repository": "razorpay-mcp-server",
+      "invariant": "Retryable financial effects need a stable caller-owned identity.",
+      "severity": "medium",
+      "claim_kind": "compatibility",
+      "evidence": [
+        {
+          "path": "razorpay-mcp-server/pkg/razorpay/refunds.go",
+          "line": 73,
+          "matched": "refund, err := client.Payment.Refund(",
+          "source_hash": "d774fc3b1b325289d98d38e390e0c0938f446f6515b7afe4956c41ddf4825b6d"
+        }
+      ],
+      "remediation": "Expose a required intent identity and send it as X-Refund-Idempotency with immutable request hashing."
+    },
+    {
+      "id": "RP-MCP-REFUND-TRUNCATION",
+      "title": "Refund MCP tool silently truncates a fractional subunit amount",
+      "repository": "razorpay-mcp-server",
+      "invariant": "Subunit money is integer-valued and invalid fractions must be rejected, never changed.",
+      "severity": "medium",
+      "claim_kind": "defect",
+      "evidence": [
+        {
+          "path": "razorpay-mcp-server/pkg/razorpay/refunds.go",
+          "line": 64,
+          "matched": "ValidateAndAddRequiredFloat(payload, \"amount\").",
+          "source_hash": "d774fc3b1b325289d98d38e390e0c0938f446f6515b7afe4956c41ddf4825b6d"
+        },
+        {
+          "path": "razorpay-mcp-server/pkg/razorpay/refunds.go",
+          "line": 75,
+          "matched": "int(payload[\"amount\"].(float64)), data, nil)",
+          "source_hash": "d774fc3b1b325289d98d38e390e0c0938f446f6515b7afe4956c41ddf4825b6d"
+        }
+      ],
+      "remediation": "Validate an int64 at the MCP boundary and reject fractional JSON values."
+    },
+    {
+      "id": "RP-PYTHON-WEBHOOK-BYTES",
+      "title": "Python utility owns a text boundary instead of the raw webhook bytes",
+      "repository": "razorpay-python",
+      "invariant": "Webhook verification should preserve exact raw request bytes.",
+      "severity": "medium",
+      "claim_kind": "known_public",
+      "evidence": [
+        {
+          "path": "razorpay-python/razorpay/utility/utility.py",
+          "line": 62,
+          "matched": "body = bytes(body, 'utf-8')",
+          "source_hash": "d63f3ef941aff84d3032f089cd84040afe0e231da94e68393d7848c9bd89168b"
+        }
+      ],
+      "remediation": "Add a raw-bytes verifier and retain the text API only as a compatibility wrapper."
+    },
+    {
+      "id": "RP-RUBY-PAYLINK-ORDER",
+      "title": "Ruby payment-link verification depends on hash insertion order",
+      "repository": "razorpay-ruby",
+      "invariant": "Signature preimages must use named fields in the documented order.",
+      "severity": "medium",
+      "claim_kind": "defect",
+      "evidence": [
+        {
+          "path": "razorpay-ruby/lib/razorpay/utility.rb",
+          "line": 20,
+          "matched": "data = attributes.values.join('|')",
+          "source_hash": "3c3ea8ba71dfb1326dc927d6ac04119fa5e082e5668aff5e94ef562048529788"
+        }
+      ],
+      "remediation": "Construct the preimage from explicitly named fields in a constant documented order."
+    },
+    {
+      "id": "RP-DOTNET-SIGNATURE-COMPARE",
+      "title": ".NET signature comparison is not constant time",
+      "repository": "razorpay-dot-net",
+      "invariant": "Authentication tags should be compared in constant time.",
+      "severity": "low",
+      "claim_kind": "known_public",
+      "evidence": [
+        {
+          "path": "razorpay-dot-net/src/Utils.cs",
+          "line": 72,
+          "matched": "bool verified = actualSignature.Equals(expectedSignature);",
+          "source_hash": "6a439b84a953e50d1158608825c9f1a79cf053995f789f38bf5f0900b0abda80"
+        }
+      ],
+      "remediation": "Decode fixed-length hexadecimal tags and use CryptographicOperations.FixedTimeEquals."
+    },
+    {
+      "id": "RP-JAVA-DEFAULT-CHARSET",
+      "title": "Java signature utility relies on the process default charset",
+      "repository": "razorpay-java",
+      "invariant": "Cryptographic byte encoding must be explicit and portable.",
+      "severity": "low",
+      "claim_kind": "known_public",
+      "evidence": [
+        {
+          "path": "razorpay-java/src/main/java/com/razorpay/Utils.java",
+          "line": 53,
+          "matched": "return isEqual(actualSignature.getBytes(), expectedSignature.getBytes());",
+          "source_hash": "6f6ad799b84081187e3f6e7cfb0233c407de748cb7b0045a04f294def56434e2"
+        },
+        {
+          "path": "razorpay-java/src/main/java/com/razorpay/Utils.java",
+          "line": 108,
+          "matched": "byte[] hash = sha256_HMAC.doFinal(payload.getBytes());",
+          "source_hash": "6f6ad799b84081187e3f6e7cfb0233c407de748cb7b0045a04f294def56434e2"
+        }
+      ],
+      "remediation": "Use StandardCharsets.UTF_8 explicitly for every signature preimage."
+    },
+    {
+      "id": "RP-MCP-GENERATOR-SIGNATURE-LENGTH-500",
+      "title": "Generated Node verifier turns malformed signature length into HTTP 500",
+      "repository": "razorpay-mcp-server",
+      "invariant": "Malformed untrusted signatures must fail as authentication errors, not exceptions.",
+      "severity": "low",
+      "claim_kind": "defect",
+      "evidence": [
+        {
+          "path": "razorpay-mcp-server/pkg/razorpay/integrations/backend_node.go",
+          "line": 69,
+          "matched": "if (crypto.timingSafeEqual(Buffer.from(expectedSignature), Buffer.from(razorpay_signature))) {",
+          "source_hash": "496f37dd7edec55094f6e8fcad982c337e6bb81afec2b62c1f0af61cd5d371bf"
+        },
+        {
+          "path": "razorpay-mcp-server/pkg/razorpay/integrations/backend_node.go",
+          "line": 410,
+          "matched": "const isValid = crypto.timingSafeEqual(",
+          "source_hash": "496f37dd7edec55094f6e8fcad982c337e6bb81afec2b62c1f0af61cd5d371bf"
+        },
+        {
+          "path": "razorpay-mcp-server/pkg/razorpay/integrations/backend_node.go",
+          "line": 625,
+          "matched": "if (crypto.timingSafeEqual(Buffer.from(expectedSignature), Buffer.from(razorpay_signature))) {",
+          "source_hash": "496f37dd7edec55094f6e8fcad982c337e6bb81afec2b62c1f0af61cd5d371bf"
+        },
+        {
+          "path": "razorpay-mcp-server/pkg/razorpay/integrations/backend_node.go",
+          "line": 742,
+          "matched": "if (crypto.timingSafeEqual(Buffer.from(expectedSignature), Buffer.from(razorpay_signature))) {",
+          "source_hash": "496f37dd7edec55094f6e8fcad982c337e6bb81afec2b62c1f0af61cd5d371bf"
+        },
+        {
+          "path": "razorpay-mcp-server/pkg/razorpay/integrations/backend_node.go",
+          "line": 862,
+          "matched": "if (crypto.timingSafeEqual(Buffer.from(expectedSignature), Buffer.from(razorpay_signature))) {",
+          "source_hash": "496f37dd7edec55094f6e8fcad982c337e6bb81afec2b62c1f0af61cd5d371bf"
+        }
+      ],
+      "remediation": "Decode strict hex, validate equal fixed length, then compare in constant time and return 400."
+    },
+    {
+      "id": "RP-MCP-PAYOUT-NAME-DRIFT",
+      "title": "Payout tool name differs between current source and some callers",
+      "repository": "razorpay-mcp-server",
+      "invariant": "Tool names need a versioned compatibility map.",
+      "severity": "low",
+      "claim_kind": "compatibility",
+      "evidence": [
+        {
+          "path": "razorpay-mcp-server/pkg/razorpay/payouts.go",
+          "line": 59,
+          "matched": "\"fetch_payout_with_id\",",
+          "source_hash": "afccb2b31d2267fb38644f52e554092f840bdee1a8708837975ddeefd6af4e4d"
+        }
+      ],
+      "remediation": "Publish the current name and retain an explicit alias for fetch_payout_by_id."
+    },
+    {
+      "id": "RP-NODE-SIGNATURE-COMPARE",
+      "title": "Node signature utility uses ordinary string equality",
+      "repository": "razorpay-node",
+      "invariant": "Authentication tags should be compared in constant time.",
+      "severity": "low",
+      "claim_kind": "known_public",
+      "evidence": [
+        {
+          "path": "razorpay-node/lib/utils/razorpay-utils.js",
+          "line": 102,
+          "matched": "return expectedSignature === signature;",
+          "source_hash": "4db2a6c1d162bb9fd1f03f29572e37d43f42321f0d3fb6d8b70b74c8d1b1be4e"
+        }
+      ],
+      "remediation": "Decode strict fixed-length hexadecimal tags and use timingSafeEqual."
+    },
+    {
+      "id": "RP-PYTHON-PAYLINK-MISSING-FIELD",
+      "title": "Python payment-link verifier reads an unvalidated required field",
+      "repository": "razorpay-python",
+      "invariant": "All signature preimage fields must be validated before access.",
+      "severity": "low",
+      "claim_kind": "defect",
+      "evidence": [
+        {
+          "path": "razorpay-python/razorpay/utility/utility.py",
+          "line": 28,
+          "matched": "payment_link_id = str(parameters['payment_link_id'])",
+          "source_hash": "d63f3ef941aff84d3032f089cd84040afe0e231da94e68393d7848c9bd89168b"
+        }
+      ],
+      "remediation": "Validate the complete required field set and return a typed validation error."
+    }
+  ],
+  "findings_by_severity": {
+    "critical": 1,
+    "high": 8,
+    "low": 6,
+    "medium": 8
+  },
+  "direct_defects": 17,
+  "detector_count": 23,
+  "chains": [
+    {
+      "id": "CHAIN-REFUND-MUTATION-RETRY-OBSERVABILITY",
+      "title": "A malformed refund is silently changed, then lacks a stable retry identity",
+      "component_findings": [
+        "RP-MCP-REFUND-TRUNCATION",
+        "RP-MCP-REFUND-IDEMPOTENCY"
+      ],
+      "consequence": "A network interruption after acceptance can leave both the sent amount and effect identity uncertain.",
+      "demonstration": "Intercept the provider request, submit 100.75 twice around a forced disconnect, and compare request bodies and refund IDs."
+    },
+    {
+      "id": "CHAIN-CHECKOUT-ECONOMIC-DECOUPLING",
+      "title": "Browser authority, binary floats, and a fixed exponent decouple charge from catalog price",
+      "component_findings": [
+        "RP-MCP-GENERATOR-UNTRUSTED-ECONOMICS",
+        "RP-MCP-GENERATOR-MONEY-UNDERCHARGE",
+        "RP-MCP-GENERATOR-CURRENCY-EXPONENT"
+      ],
+      "consequence": "A fresh generated checkout can accept a tampered or mis-scaled amount and still produce a validly signed provider payment.",
+      "demonstration": "Generate the integration, change the browser amount, and run INR 2.01, JPY 295, and KWD 295.990 controls against captured outbound orders."
+    },
+    {
+      "id": "CHAIN-MOBILE-PAID-BUT-FAILED",
+      "title": "Mobile success loses the signature required by the generated server verifier",
+      "component_findings": [
+        "RP-MCP-MOBILE-MISSING-SIGNATURE"
+      ],
+      "consequence": "The provider can report success while the merchant cannot complete its generated verification path.",
+      "demonstration": "Run each generated success callback and assert that the signed payment tuple reaches the server intact."
+    },
+    {
+      "id": "CHAIN-CROSS-TENANT-ROUTING",
+      "title": "Process-wide SDK state can redirect concurrent tenant traffic",
+      "component_findings": [
+        "RP-DOTNET-GLOBAL-AUTH-STATE",
+        "RP-PHP-GLOBAL-AUTH-STATE",
+        "RP-JAVA-GLOBAL-PARTNER-HEADERS"
+      ],
+      "consequence": "Creating or mutating one client can change credentials or partner routing used by another client in the same process.",
+      "demonstration": "Instantiate tenants A and B, interleave requests through a capture server, and assert every Authorization and X-Razorpay-Account pair."
+    },
+    {
+      "id": "CHAIN-JAVA-DOCUMENT-WIRE-CORRUPTION",
+      "title": "Java document serialization combines a wrong MIME with duplicate file parts",
+      "component_findings": [
+        "RP-JAVA-UPLOAD-MIME",
+        "RP-JAVA-UPLOAD-DUPLICATE-FILE-PART"
+      ],
+      "consequence": "An otherwise valid JPG or PNG can reach the document endpoint as an ambiguous multipart body.",
+      "demonstration": "Capture the multipart request and assert one binary file part whose Content-Type matches its magic bytes."
+    },
+    {
+      "id": "CHAIN-MOBILE-PACKAGE-IDENTITY",
+      "title": "Generated payment code crosses into an unrelated package namespace",
+      "component_findings": [
+        "RP-MCP-MOBILE-DEPENDENCY-CONFUSION"
+      ],
+      "consequence": "A copy-pasted integration depends on an identity outside Razorpay's documented package boundary.",
+      "demonstration": "Resolve the generated coordinates against the live registries and compare publisher, contents, and official documentation."
+    }
+  ]
+}

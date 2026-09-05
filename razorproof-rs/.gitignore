@@ -1,0 +1,6 @@
+/target/
+/.razorproof/
+*.db
+*.db-shm
+*.db-wal
+.env

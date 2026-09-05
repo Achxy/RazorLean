@@ -1,0 +1,227 @@
+{
+  "created_at": "2026-09-03T11:04:33.789997+00:00",
+  "method": "compose only independently evidenced nodes; mark unexecuted causal impact explicitly",
+  "chains": [
+    {
+      "id": "CHAIN-REFUND-MUTATION-RETRY-OBSERVABILITY",
+      "title": "Silent refund mutation can combine with non-idempotent retry and lost .NET webhook visibility",
+      "proof_grade": "all components reproduced; the production retry trigger is an explicit inference",
+      "nodes": [
+        {
+          "state": "confirmed_dynamic",
+          "claim": "Official MCP handler accepts 100.75 and sends 100 to the SDK request path.",
+          "evidence": "RP-MCP-REFUND-TRUNCATION",
+          "passed": true
+        },
+        {
+          "state": "razorpay_test_observed",
+          "claim": "The direct Refund API separately accepted 100.75 and returned/persisted 100.",
+          "evidence": "artifacts/razorpay-test/refund-identity-matrix.json",
+          "passed": true
+        },
+        {
+          "state": "razorpay_test_control",
+          "claim": "Two unkeyed retry requests created two distinct effects by documented identity semantics.",
+          "evidence": "artifacts/razorpay-test/refund-identity-matrix.json",
+          "passed": true
+        },
+        {
+          "state": "razorpay_test_observed",
+          "claim": "Signed refund webhooks contained literal UTF-8; exact bytes verified and the .NET ASCII-equivalent digest failed.",
+          "evidence": "artifacts/razorpay-test/webhook-byte-evidence.json",
+          "passed": true
+        },
+        {
+          "state": "inferred_impact",
+          "claim": "If a consumer treats the rejected event as absence/failure and retries without a stable identity, the independently proven retry behavior amplifies one intent into multiple refunds.",
+          "evidence": "composition of the four preceding counterexamples",
+          "passed": null
+        }
+      ],
+      "razorproof_prevention": [
+        "integer-only monetary boundary",
+        "mandatory stable effect identity for retryable money movement",
+        "exact raw-byte webhook verification",
+        "cross-artifact trace linking request, effect, and event"
+      ],
+      "confirmed_nodes_pass": true
+    },
+    {
+      "id": "CHAIN-CHECKOUT-ECONOMIC-DECOUPLING",
+      "title": "Browser-controlled economics plus fixed currency exponent can create a valid but wrong-priced order",
+      "proof_grade": "generated path and Test order persistence proven; paid fulfillment remains unexecuted",
+      "nodes": [
+        {
+          "state": "confirmed_static",
+          "claim": "Generated frontend sends browser amount; backend trusts amount and currency; verifier authenticates only the returned payment tuple.",
+          "evidence": "RP-MCP-GENERATOR-UNTRUSTED-ECONOMICS",
+          "passed": true
+        },
+        {
+          "state": "confirmed_dynamic",
+          "claim": "The emitted \u00d7100 expression maps JPY 295 to 29,500 and KWD 295.990 intent to 29,599.",
+          "evidence": "RP-MCP-GENERATOR-CURRENCY-EXPONENT",
+          "passed": true
+        },
+        {
+          "state": "razorpay_test_observed",
+          "claim": "Razorpay Test Orders persisted both wrong generated values and both exact controls.",
+          "evidence": "artifacts/razorpay-test/expanded-order-contract-matrix.json",
+          "passed": true
+        },
+        {
+          "state": "inferred_impact",
+          "claim": "A payment signature can prove that the wrong-priced order was paid; it cannot retroactively prove that the order matched the merchant's intended cart or quote.",
+          "evidence": "protocol property; payment/fulfillment leg not executed in this campaign",
+          "passed": null
+        }
+      ],
+      "razorproof_prevention": [
+        "server-authoritative immutable quote",
+        "currency-aware exact subunit conversion",
+        "one-time binding of quote, Razorpay order, payment, merchant, and fulfillment"
+      ],
+      "confirmed_nodes_pass": true
+    },
+    {
+      "id": "CHAIN-MOBILE-PAID-BUT-FAILED",
+      "title": "Four generated native flows reach success without the data required by their generated verifier",
+      "proof_grade": "source-deterministic against official callback contracts; device payment not executed",
+      "nodes": [
+        {
+          "state": "confirmed_static",
+          "claim": "Android and iOS choose payment_id-only callback protocols; Cordova and native Capacitor use payment_id-only callback shapes.",
+          "evidence": "RP-MCP-MOBILE-MISSING-SIGNATURE",
+          "passed": true
+        },
+        {
+          "state": "confirmed_static",
+          "claim": "Generated Android/iOS send an empty signature and Cordova/Capacitor omit it.",
+          "evidence": "RP-MCP-MOBILE-MISSING-SIGNATURE",
+          "passed": true
+        },
+        {
+          "state": "deterministic_consequence",
+          "claim": "The generated backend rejects a missing or empty signature after Checkout has already reported success.",
+          "evidence": "generated verify route required-field guard",
+          "passed": true
+        }
+      ],
+      "razorproof_prevention": [
+        "callback-shape contract checking",
+        "cross-file dataflow completeness",
+        "generated success-path integration test"
+      ],
+      "confirmed_nodes_pass": true
+    },
+    {
+      "id": "CHAIN-CROSS-TENANT-ROUTING",
+      "title": "Process-global SDK state can cross merchant authentication and partner routing boundaries",
+      "proof_grade": "three official SDK runtime collisions proven; two-account provider request intentionally not executed",
+      "nodes": [
+        {
+          "state": "confirmed_dynamic",
+          "claim": ".NET client B replaced A's credentials, inherited A's routing header, and made A's valid signature fail.",
+          "evidence": "RP-DOTNET-GLOBAL-AUTH-STATE",
+          "passed": true
+        },
+        {
+          "state": "confirmed_dynamic",
+          "claim": "PHP client B replaced A's global key and inherited A's routing header.",
+          "evidence": "RP-PHP-GLOBAL-AUTH-STATE",
+          "passed": true
+        },
+        {
+          "state": "confirmed_dynamic",
+          "claim": "Java client B inherited and then overwrote the process-global X-Razorpay-Account map.",
+          "evidence": "RP-JAVA-GLOBAL-PARTNER-HEADERS",
+          "passed": true
+        },
+        {
+          "state": "inferred_impact",
+          "claim": "A request interleaving in a multi-merchant worker can authenticate or route an operation under the wrong merchant context.",
+          "evidence": "official partner-header semantics plus reproduced shared state",
+          "passed": null
+        }
+      ],
+      "razorproof_prevention": [
+        "client-isolation contract",
+        "parallel interleaving tests",
+        "merchant-context trace assertions"
+      ],
+      "confirmed_nodes_pass": true
+    },
+    {
+      "id": "CHAIN-JAVA-DOCUMENT-WIRE-CORRUPTION",
+      "title": "One Java upload can carry both the wrong MIME type and two conflicting file fields",
+      "proof_grade": "exact SDK multipart bytes proven; provider upload not executed",
+      "nodes": [
+        {
+          "state": "confirmed_dynamic",
+          "claim": "proof.png is labeled image/pdf.",
+          "evidence": "RP-JAVA-UPLOAD-MIME",
+          "passed": true
+        },
+        {
+          "state": "confirmed_dynamic",
+          "claim": "The same request contains two multipart fields named file, one binary and one pathname text field.",
+          "evidence": "RP-JAVA-UPLOAD-DUPLICATE-FILE-PART",
+          "passed": true
+        },
+        {
+          "state": "inferred_impact",
+          "claim": "Duplicate-field selection and MIME validation can independently or jointly reject/misclassify dispute and KYC evidence.",
+          "evidence": "document API contract; provider upload not executed",
+          "passed": null
+        }
+      ],
+      "razorproof_prevention": [
+        "multipart field-cardinality contract",
+        "extension-to-MIME mapping contract",
+        "wire-body snapshot probe"
+      ],
+      "confirmed_nodes_pass": true
+    },
+    {
+      "id": "CHAIN-MOBILE-PACKAGE-IDENTITY",
+      "title": "Generated mobile setup crosses from Razorpay code into the wrong package identities",
+      "proof_grade": "current registry state reproduced; no malicious-package claim",
+      "nodes": [
+        {
+          "state": "confirmed_static",
+          "claim": "Generator emits the two non-official package names.",
+          "evidence": "RP-MCP-MOBILE-DEPENDENCY-CONFUSION",
+          "passed": true
+        },
+        {
+          "state": "registry_observed",
+          "claim": "Cordova/Ionic package is absent; Capacitor package exists as a two-file 'Empty package' outside Razorpay's repository identity.",
+          "evidence": "artifacts/registry/mobile-registry-evidence.json",
+          "passed": true
+        },
+        {
+          "state": "deterministic_consequence",
+          "claim": "Cordova/Ionic installation fails; Capacitor installs no functional Razorpay bridge.",
+          "evidence": "npm 404 and published package contents",
+          "passed": true
+        },
+        {
+          "state": "inferred_risk",
+          "claim": "Depending on a similarly named third-party package creates a future package-supply-chain exposure.",
+          "evidence": "package ownership boundary; current package is empty, not alleged malicious",
+          "passed": null
+        }
+      ],
+      "razorproof_prevention": [
+        "verified package-identity allowlist",
+        "registry existence and repository-owner checks",
+        "generated install smoke test"
+      ],
+      "confirmed_nodes_pass": true
+    }
+  ],
+  "checks": {
+    "all_evidence_backed_nodes_pass": true,
+    "inferences_are_explicit": true
+  }
+}

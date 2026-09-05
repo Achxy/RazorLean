@@ -1,0 +1,135 @@
+{
+  "created_at": "2026-09-03T09:28:00.718893+00:00",
+  "evidence_scope": "razorpay-test-control-plane",
+  "real_money": false,
+  "payment_id_fingerprint": "e3a0961ef9d1",
+  "before": {
+    "refund_count": 0,
+    "refunded_amount": 0
+  },
+  "boundary_rejections": {
+    "below_minimum": {
+      "http_status": 400,
+      "accepted": false,
+      "refund_id_fingerprint": null,
+      "amount": null,
+      "status": null,
+      "error_description": "The amount must be atleast INR 1.00"
+    },
+    "fractional_subunit": {
+      "http_status": 200,
+      "accepted": true,
+      "refund_id_fingerprint": "49eb02c30d1c",
+      "amount": 100,
+      "status": "pending",
+      "error_description": ""
+    },
+    "over_refund": {
+      "http_status": 400,
+      "accepted": false,
+      "refund_id_fingerprint": null,
+      "amount": null,
+      "status": null,
+      "error_description": "The refund amount provided is greater than amount captured"
+    }
+  },
+  "header_same_key_changed_body": {
+    "first": {
+      "http_status": 200,
+      "accepted": true,
+      "refund_id_fingerprint": "06df37b0eebf",
+      "amount": 100,
+      "status": "pending",
+      "error_description": ""
+    },
+    "changed_body_retry": {
+      "http_status": 409,
+      "accepted": false,
+      "refund_id_fingerprint": null,
+      "amount": null,
+      "status": null,
+      "error_description": "Different request with the same idempotency key has already been processed."
+    },
+    "changed_body_rejected": true
+  },
+  "receipt_retry": {
+    "first": {
+      "http_status": 200,
+      "accepted": true,
+      "refund_id_fingerprint": "937ecd5b4c61",
+      "amount": 100,
+      "status": "pending",
+      "error_description": ""
+    },
+    "retry": {
+      "http_status": 400,
+      "accepted": false,
+      "refund_id_fingerprint": null,
+      "amount": null,
+      "status": null,
+      "error_description": "Duplicate receipt found for this refund request."
+    },
+    "duplicate_prevented": true
+  },
+  "unkeyed_retry": {
+    "first": {
+      "http_status": 200,
+      "accepted": true,
+      "refund_id_fingerprint": "fe8b2675ffcc",
+      "amount": 100,
+      "status": "pending",
+      "error_description": ""
+    },
+    "retry": {
+      "http_status": 200,
+      "accepted": true,
+      "refund_id_fingerprint": "c0bb2cdb84bc",
+      "amount": 100,
+      "status": "pending",
+      "error_description": ""
+    },
+    "two_distinct_effects": true
+  },
+  "idempotent_full_refund": {
+    "amount": 401,
+    "first": {
+      "http_status": 400,
+      "accepted": false,
+      "refund_id_fingerprint": null,
+      "amount": null,
+      "status": null,
+      "error_description": "The total refund amount is greater than the refund payment amount"
+    },
+    "retry": {
+      "http_status": 400,
+      "accepted": false,
+      "refund_id_fingerprint": null,
+      "amount": null,
+      "status": null,
+      "error_description": "The total refund amount is greater than the refund payment amount"
+    },
+    "one_effect": false
+  },
+  "after": {
+    "http_status": 200,
+    "refund_count": 5,
+    "refunded_amount": 500,
+    "refund_id_fingerprints": [
+      "06df37b0eebf",
+      "49eb02c30d1c",
+      "937ecd5b4c61",
+      "c0bb2cdb84bc",
+      "fe8b2675ffcc"
+    ]
+  },
+  "checks": {
+    "below_minimum_rejected": true,
+    "fractional_subunit_rejected": false,
+    "over_refund_rejected": true,
+    "header_changed_body_rejected": true,
+    "receipt_duplicate_prevented": true,
+    "unkeyed_retry_created_two_effects": true,
+    "idempotent_full_refund_one_effect": false,
+    "payment_fully_refunded": false
+  }
+}

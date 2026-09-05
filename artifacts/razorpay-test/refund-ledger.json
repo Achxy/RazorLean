@@ -1,0 +1,74 @@
+{
+  "created_at": "2026-09-03T09:32:12.067785+00:00",
+  "evidence_scope": "razorpay-test-control-plane",
+  "real_money": false,
+  "payment_id_fingerprint": "e3a0961ef9d1",
+  "payment": {
+    "status": "refunded",
+    "amount": 801,
+    "amount_refunded": 801
+  },
+  "refund_count": 6,
+  "refunded_total": 801,
+  "refunds": [
+    {
+      "refund_id_fingerprint": "06df37b0eebf",
+      "label": "header-body-mismatch",
+      "amount": 100,
+      "status": "processed",
+      "speed_requested": "normal",
+      "speed_processed": "normal",
+      "receipt_present": false
+    },
+    {
+      "refund_id_fingerprint": "937ecd5b4c61",
+      "label": "receipt-identity",
+      "amount": 100,
+      "status": "processed",
+      "speed_requested": "normal",
+      "speed_processed": "normal",
+      "receipt_present": true
+    },
+    {
+      "refund_id_fingerprint": "7676a9d48882",
+      "label": "reconciled-idempotent-close",
+      "amount": 301,
+      "status": "processed",
+      "speed_requested": "normal",
+      "speed_processed": "normal",
+      "receipt_present": false
+    },
+    {
+      "refund_id_fingerprint": "49eb02c30d1c",
+      "label": "refund-fractional-subunit",
+      "amount": 100,
+      "status": "processed",
+      "speed_requested": "normal",
+      "speed_processed": "normal",
+      "receipt_present": false
+    },
+    {
+      "refund_id_fingerprint": "c0bb2cdb84bc",
+      "label": "unkeyed-retry-control",
+      "amount": 100,
+      "status": "processed",
+      "speed_requested": "normal",
+      "speed_processed": "normal",
+      "receipt_present": false
+    },
+    {
+      "refund_id_fingerprint": "fe8b2675ffcc",
+      "label": "unkeyed-retry-control",
+      "amount": 100,
+      "status": "processed",
+      "speed_requested": "normal",
+      "speed_processed": "normal",
+      "receipt_present": false
+    }
+  ],
+  "checks": {
+    "all_refunds_processed": true,
+    "payment_fully_refunded": true,
+    "fractional_request_persisted_as_integer_100": true
+  }
+}

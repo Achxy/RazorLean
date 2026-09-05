@@ -1,0 +1,108 @@
+{
+  "created_at": "2026-09-04T16:44:33.074198+00:00",
+  "evidence_scope": "razorpay-test-control-plane",
+  "real_money": false,
+  "credential_mode": "rzp_test_ CSV; secret not persisted in evidence",
+  "key_id_fingerprint": "0bb387c233eb",
+  "observations": [
+    {
+      "name": "duplicate_receipt_first",
+      "requested_amount": 100,
+      "currency": "INR",
+      "http_status": 200,
+      "accepted": true,
+      "persisted_amount": 100,
+      "persisted_currency": "INR",
+      "entity_id_fingerprint": "e9314fd4bee9",
+      "error_description": ""
+    },
+    {
+      "name": "duplicate_receipt_second",
+      "requested_amount": 100,
+      "currency": "INR",
+      "http_status": 200,
+      "accepted": true,
+      "persisted_amount": 100,
+      "persisted_currency": "INR",
+      "entity_id_fingerprint": "ab7637abf04b",
+      "error_description": ""
+    },
+    {
+      "name": "generated_jpy_295_times_100",
+      "requested_amount": 29500,
+      "currency": "JPY",
+      "http_status": 200,
+      "accepted": true,
+      "persisted_amount": 29500,
+      "persisted_currency": "JPY",
+      "entity_id_fingerprint": "6bc8fd1d481f",
+      "error_description": ""
+    },
+    {
+      "name": "exact_jpy_295",
+      "requested_amount": 295,
+      "currency": "JPY",
+      "http_status": 200,
+      "accepted": true,
+      "persisted_amount": 295,
+      "persisted_currency": "JPY",
+      "entity_id_fingerprint": "c9ca79e129e3",
+      "error_description": ""
+    },
+    {
+      "name": "generated_kwd_295_99_times_100",
+      "requested_amount": 29599,
+      "currency": "KWD",
+      "http_status": 200,
+      "accepted": true,
+      "persisted_amount": 29599,
+      "persisted_currency": "KWD",
+      "entity_id_fingerprint": "c2b0fbfb4d1b",
+      "error_description": ""
+    },
+    {
+      "name": "exact_kwd_295_990",
+      "requested_amount": 295990,
+      "currency": "KWD",
+      "http_status": 200,
+      "accepted": true,
+      "persisted_amount": 295990,
+      "persisted_currency": "KWD",
+      "entity_id_fingerprint": "b0cd87b773a3",
+      "error_description": ""
+    },
+    {
+      "name": "fractional_order_control",
+      "requested_amount": 100.75,
+      "currency": "INR",
+      "http_status": 400,
+      "accepted": false,
+      "persisted_amount": null,
+      "persisted_currency": null,
+      "entity_id_fingerprint": null,
+      "error_description": "The amount must be an integer."
+    },
+    {
+      "name": "fractional_payment_link_control",
+      "requested_amount": 100.75,
+      "currency": "INR",
+      "http_status": 400,
+      "accepted": false,
+      "entity_id_fingerprint": null,
+      "error_description": "amount, should be a whole number for e.g. 2234 to create a payment link for 22.34 INR"
+    }
+  ],
+  "checks": {
+    "duplicate_receipt_accepted_as_two_orders": true,
+    "generated_jpy_wrong_amount_persisted": true,
+    "generated_kwd_wrong_amount_persisted": true,
+    "orders_reject_fractional_subunits": true,
+    "payment_links_reject_fractional_subunits": true,
+    "all_requests_completed": true
+  },
+  "classifications": {
+    "currency_exponent": "generated-code defect; Orders API faithfully persists the wrong integer",
+    "duplicate_receipt": "documentation/control-plane contradiction; not treated as a uniqueness outage",
+    "fractional_controls": "negative controls showing correct rejection outside the Refund API fail-open path"
+  }
+}

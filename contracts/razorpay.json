@@ -1,0 +1,181 @@
+{
+  "schema_version": "0.1.0",
+  "provider": "Razorpay",
+  "contracts": [
+    {
+      "id": "refund.create",
+      "operation": "POST /v1/payments/:id/refund",
+      "sources": [
+        "https://razorpay.com/docs/api/refunds/instant-refunds-idempotent/"
+      ],
+      "money": {
+        "field": "amount",
+        "representation": "integer_currency_subunit",
+        "optional_for_full_effect": true,
+        "must_never_round": true
+      },
+      "effect": {
+        "identity_mechanisms": [
+          "X-Refund-Idempotency header",
+          "stable receipt field"
+        ],
+        "without_identity": "each request is a distinct refund intent",
+        "same_header_key_same_body": "same_refund",
+        "same_receipt": "duplicate_rejected_without_second_effect"
+      }
+    },
+    {
+      "id": "order.create",
+      "operation": "POST /v1/orders",
+      "sources": [
+        "https://razorpay.com/docs/api/orders/create/"
+      ],
+      "money": {
+        "field": "amount",
+        "representation": "integer_currency_subunit",
+        "must_never_round": true
+      }
+    },
+    {
+      "id": "webhook.verify",
+      "operation": "HMAC-SHA256 webhook verification",
+      "sources": [
+        "https://razorpay.com/docs/webhooks/validate-test/"
+      ],
+      "cryptography": {
+        "message": "exact_raw_request_bytes",
+        "comparison_policy": "constant_time_is_razorproof_hardening_not_provider_contract",
+        "valid_bytes_must_be_accepted": true,
+        "one_byte_mutation_must_be_rejected": true
+      }
+    },
+    {
+      "id": "collection.expand",
+      "operation": "GET collection with repeated expand[]",
+      "sources": [
+        "https://razorpay.com/docs/api/orders/fetch-all-expanded/"
+      ],
+      "collection": {
+        "field": "expand[]",
+        "multiplicity": "preserve_all_values"
+      }
+    },
+    {
+      "id": "checkout.generated-order",
+      "operation": "generated backend creates a Razorpay order",
+      "sources": [
+        "https://razorpay.com/docs/api/orders/create/"
+      ],
+      "money": {
+        "input_boundary": "integer_currency_subunit_or_exact_decimal_string",
+        "api_field": "amount",
+        "api_representation": "integer_currency_subunit",
+        "binary_float_conversion_forbidden": true,
+        "must_reject_excess_precision": true
+      }
+    },
+    {
+      "id": "checkout.currency-exponent",
+      "operation": "generated backend converts major-unit prices for an arbitrary currency",
+      "sources": [
+        "https://razorpay.com/docs/payments/server-integration/nodejs/integration-steps/?preferred-country=IN"
+      ],
+      "money": {
+        "api_representation": "integer_currency_subunit",
+        "conversion_depends_on_currency": true,
+        "examples": {
+          "JPY_295": 295,
+          "INR_295_99": 29599,
+          "KWD_295_990": 295990
+        },
+        "hardcoded_two_decimal_exponent_for_arbitrary_currency_forbidden": true
+      }
+    },
+    {
+      "id": "checkout.quote-binding",
+      "operation": "create and consume a generated checkout order",
+      "sources": [
+        "https://razorpay.com/docs/payments/server-integration/nodejs/integration-steps/?preferred-country=IN"
+      ],
+      "authorization": {
+        "price_currency_and_cart_source": "authoritative_server_quote",
+        "browser_amount_is_untrusted": true,
+        "payment_tuple_must_bind_to_merchant_quote": true,
+        "successful_payment_consumption": "one_time_idempotent_state_transition",
+        "browser_local_storage_is_not_an_authoritative_order_record": true
+      }
+    },
+    {
+      "id": "sdk.client-isolation",
+      "operation": "multiple SDK client instances in one process",
+      "sources": [
+        "https://razorpay.com/docs/payments/server-integration/nodejs/integration-steps/?preferred-country=IN"
+      ],
+      "isolation": {
+        "credentials": "instance_scoped",
+        "base_url": "instance_scoped",
+        "request_headers": "instance_scoped",
+        "client_construction_must_not_mutate_existing_clients": true
+      }
+    },
+    {
+      "id": "partner.header-isolation",
+      "operation": "partner requests on behalf of multiple sub-merchants",
+      "sources": [
+        "https://razorpay.com/docs/partners/aggregators/partner-auth/?preferred-country=IN"
+      ],
+      "isolation": {
+        "routing_header": "X-Razorpay-Account",
+        "scope": "one intended request or client instance",
+        "cross_client_header_leak_forbidden": true
+      }
+    },
+    {
+      "id": "document.multipart",
+      "operation": "POST /v1/documents",
+      "sources": [
+        "https://razorpay.com/docs/api/documents/create/?preferred-country=IN"
+      ],
+      "multipart": {
+        "binary_field": "file",
+        "binary_field_cardinality": 1,
+        "accepted_mime_types": [
+          "image/jpg",
+          "image/jpeg",
+          "image/png",
+          "application/pdf"
+        ],
+        "file_path_must_not_be_duplicated_as_a_text_part": true
+      }
+    },
+    {
+      "id": "payment-link.verify",
+      "operation": "verify payment-link success callback",
+      "sources": [
+        "https://razorpay.com/docs/payments/payment-links/apis/"
+      ],
+      "cryptography": {
+        "message_fields_in_order": [
+          "payment_link_id",
+          "payment_link_reference_id",
+          "payment_link_status",
+          "razorpay_payment_id"
+        ],
+        "caller_map_order_must_not_matter": true,
+        "comparison_policy": "constant_time_is_razorproof_hardening_not_provider_contract"
+      }
+    },
+    {
+      "id": "onboarding-signature.encrypt",
+      "operation": "AES-128-GCM onboarding signature generation",
+      "sources": [
+        "https://github.com/razorpay/razorpay-ruby/releases/tag/v3.2.4"
+      ],
+      "cryptography": {
+        "nonce_bytes": 12,
+        "nonce_uniqueness": "fresh_random_per_encryption",
+        "wire_format": "nonce_12_bytes_then_ciphertext_then_tag_16_bytes"
+      }
+    }
+  ]
+}

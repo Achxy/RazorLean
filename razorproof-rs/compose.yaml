@@ -1,0 +1,33 @@
+services:
+  razorproof:
+    build:
+      context: .
+    init: true
+    restart: unless-stopped
+    read_only: true
+    ports:
+      - "127.0.0.1:8787:8787"
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      RAZORPROOF_KEY_CSV: /run/secrets/rzp-key.csv
+      RAZORPROOF_DATABASE_URL: sqlite:///data/razorproof.db
+      RAZORPROOF_BIND: 0.0.0.0:8787
+    volumes:
+      - razorproof-data:/data
+      - type: bind
+        source: ${RAZORPROOF_HOST_KEY_CSV:?set RAZORPROOF_HOST_KEY_CSV}
+        target: /run/secrets/rzp-key.csv
+        read_only: true
+    tmpfs:
+      - /tmp:size=16m,mode=1777
+    cap_drop: [ALL]
+    security_opt:
+      - no-new-privileges:true
+    pids_limit: 128
+    mem_limit: 256m
+    cpus: 1.0
+
+volumes:
+  razorproof-data:

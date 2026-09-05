@@ -1,0 +1,19 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "razorproof-poc"
+version = "0.1.0"
+description = "Executable financial semantic conformance probes for Razorpay interfaces"
+readme = "README.md"
+requires-python = ">=3.11"
+license = {text = "MIT"}
+authors = [{name = "Achyuth Jayadevan", email = "achyuth@jayadevan.in"}]
+dependencies = []
+
+[project.scripts]
+razorproof = "razorproof.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/razorproof"]

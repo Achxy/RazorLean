@@ -1,0 +1,17 @@
+# Claim Ledger
+
+| Claim | Type | Evidence | Originality | Evidence count | Commit |
+|---|---|---|---|---:|---|
+| RP-DOTNET-GCM-NONCE-REUSE: .NET onboarding signatures reuse an AES-GCM nonce derived from the secret key | `defect` | `confirmed_dynamic` | independently discovered and executed against the official SDK | 3 | `2cd38a155ec56ea47e879a573a3acb19334c152e` |
+| RP-DOTNET-SIGNATURE-COMPARE: .NET signature verification uses ordinary string equality | `hardening` | `confirmed_static` | independently discovered hardening opportunity; no practical remote exploit reproduced | 1 | `2cd38a155ec56ea47e879a573a3acb19334c152e` |
+| RP-DOTNET-WEBHOOK-ASCII: .NET webhook verifier hashes non-ASCII strings as ASCII | `defect` | `confirmed_dynamic` | independently discovered and executed against the official SDK | 2 | `2cd38a155ec56ea47e879a573a3acb19334c152e` |
+| RP-JAVA-DEFAULT-CHARSET: Java webhook HMAC payload uses the process default charset | `compatibility_defect` | `known_public` | publicly reported compatibility issue and independently source-confirmed; not maintainer-confirmed | 1 | `ad9ab7b6e6f045b782dfd7608da04de9f930ad97` |
+| RP-MCP-EXPAND-COLLAPSE: Repeated expand[] values collapse to the last value | `defect` | `known_public` | publicly reported and source-confirmed; the linked pull request is not maintainer acceptance | 1 | `7950d51d118ca164c32b7cf0cfaa14f34f24849f` |
+| RP-MCP-GENERATOR-MONEY-UNDERCHARGE: Checkout generator emits one-paise undercharge bugs across seven backend languages | `defect` | `confirmed_dynamic` | independently discovered and reproduced; no matching public issue or pull request found | 7 | `7950d51d118ca164c32b7cf0cfaa14f34f24849f` |
+| RP-MCP-PAYOUT-NAME-DRIFT: Published payout tool name does not exist | `documentation_defect` | `confirmed_static` | independently discovered | 2 | `7950d51d118ca164c32b7cf0cfaa14f34f24849f` |
+| RP-MCP-REFUND-IDEMPOTENCY: Refund tool omits header idempotency and hides receipt safety semantics | `safety_gap` | `known_public` | publicly reported safety gap; the linked pull request is not maintainer acceptance | 2 | `7950d51d118ca164c32b7cf0cfaa14f34f24849f` |
+| RP-MCP-REFUND-TRUNCATION: Refund tool silently truncates a fractional subunit amount | `defect` | `confirmed_dynamic` | independently discovered and reproduced against the official handler and SDK request path | 3 | `7950d51d118ca164c32b7cf0cfaa14f34f24849f` |
+| RP-NODE-SIGNATURE-COMPARE: Node webhook verifier uses ordinary string equality | `hardening` | `known_public` | publicly reported hardening concern; no maintainer confirmation or practical exploit reproduction | 1 | `b9e8527225a7322ba2671a3bc0b848fd019d2d8c` |
+| RP-PYTHON-PAYLINK-MISSING-FIELD: Python payment-link verifier throws KeyError for an omitted field it forgot to validate | `defect` | `confirmed_dynamic` | publicly proposed fix, independently reproduced against the pinned official commit | 2 | `8960507a29854c8a484d130139179c2429c2f45c` |
+| RP-PYTHON-WEBHOOK-BYTES: Python webhook verifier rejects the raw bytes the webhook contract asks callers to preserve | `compatibility_defect` | `confirmed_dynamic` | publicly reported compatibility issue, independently reproduced against the pinned official commit | 2 | `8960507a29854c8a484d130139179c2429c2f45c` |
+| RP-RUBY-PAYLINK-ORDER: Ruby payment-link verification depends on Hash insertion order | `defect` | `confirmed_dynamic` | independently discovered and reproduced; no matching public report found | 2 | `807e80eb25572823ebb1872529747fb9af97282e` |

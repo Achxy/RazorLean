@@ -1,0 +1,18 @@
+{
+  "fault": "first response dropped after server commit",
+  "without_effect_identity": {
+    "returned_id": "rfnd_faultlab_2",
+    "effects": [
+      "rfnd_faultlab_1",
+      "rfnd_faultlab_2"
+    ],
+    "count": 2
+  },
+  "with_effect_identity": {
+    "returned_id": "rfnd_faultlab_1",
+    "effects": [
+      "rfnd_faultlab_1"
+    ],
+    "count": 1
+  }
+}

@@ -1,0 +1,119 @@
+1
+00:00:00,000 --> 00:00:12,600
+Alice prices an add-on at two rupees and one paisa. Payment APIs accept whole paise, not decimal rupees. Her integration must convert two point zero one into exactly two hundred and one.
+
+2
+00:00:12,600 --> 00:00:24,750
+The request succeeds, but Razorpay's dashboard shows two rupees: two hundred paise. Razorpay stored what it received. Alice's one paisa vanished before the provider could know.
+
+3
+00:00:24,750 --> 00:00:37,000
+Now open the helper. It multiplies two point zero one by one hundred in binary floating point. The runtime gets two hundred point nine nine nine; integer conversion truncates it to two hundred.
+
+4
+00:00:37,000 --> 00:00:44,000
+The API receives an integer, so nothing crashes. Alice's amount became another order.
+
+5
+00:00:44,000 --> 00:00:54,200
+Next Bob pays and receives a valid signature. He proves he paid Alice's order. Alice must still ask whether it means the purchase she intended.
+
+6
+00:00:54,200 --> 00:01:04,050
+The verifier recomputes HMAC over order ID plus payment ID with Alice's secret. A match proves those identifiers belong together, nothing more.
+
+7
+00:01:04,050 --> 00:01:13,300
+Alice's promise also had seller, two hundred and one paise, currency, cart, and fulfil-once. None of those fields reaches this check.
+
+8
+00:01:13,300 --> 00:01:22,000
+That is the semantic gap: cryptographic validity is not business correctness. A valid payment can settle the wrong order.
+
+9
+00:01:22,000 --> 00:01:31,000
+Now change currency. Bob pays yen or Kuwaiti dinar, but the same code multiplies both by one hundred.
+
+10
+00:01:31,000 --> 00:01:41,950
+The table shows both failures: two ninety-five yen becomes twenty-nine thousand five hundred, a hundredfold overcharge; dinar becomes one tenth of the intended amount.
+
+11
+00:01:41,950 --> 00:01:51,400
+The multipliers are one for yen, one hundred for rupees, one thousand for dinar. Currency determines scale; code must not guess.
+
+12
+00:01:51,400 --> 00:01:58,000
+Money pairs integer subunits with currency. One paisa was the smallest failure.
+
+13
+00:01:58,000 --> 00:02:06,350
+Now follow completion. Bob pays on mobile; checkout reports success, and Razorpay records a captured payment.
+
+14
+00:02:06,350 --> 00:02:16,100
+Captured is Razorpay's successful payment state. These fields identify the payment, its order, the amount, and the currency.
+
+15
+00:02:16,100 --> 00:02:24,800
+But generated mobile code sends both IDs with an empty signature. Its generated backend must reject that proof.
+
+16
+00:02:24,800 --> 00:02:34,000
+These halves are independent, not one trace. The concrete failure: provider says paid, application says failed, fulfilment stalls.
+
+17
+00:02:34,000 --> 00:02:41,500
+For refunds, the API needs integer subunits. Alice instead sends one hundred point seven five.
+
+18
+00:02:41,500 --> 00:02:49,900
+A funded path accepts one hundred and reports processed. A balance control rejects the same shape: inconsistent validation.
+
+19
+00:02:49,900 --> 00:02:57,950
+Response lost; Alice retries without stable idempotency. One human intention becomes two processed refunds.
+
+20
+00:02:57,950 --> 00:03:05,750
+Both refunds are valid, but neither identifies Alice's intention. Missing effect identity is unrecoverable.
+
+21
+00:03:05,750 --> 00:03:14,000
+Webhooks sign raw bytes. Unicode passes. ASCII conversion changes those bytes, so every verification fails.
+
+22
+00:03:14,000 --> 00:03:26,100
+RazorProof fixes lost intent. Before any provider call, one typed PaymentIntent binds integer amount, currency, parties, cart, permitted effect, and callback evidence.
+
+23
+00:03:26,100 --> 00:03:39,550
+At the outbound boundary, RazorProof compares Alice's promised two hundred and one subunits with the request's two hundred. They differ, so it blocks the call before Razorpay. Silent corruption becomes a deterministic error.
+
+24
+00:03:39,550 --> 00:03:53,250
+After Bob pays, browser success is not enough. RazorProof asks Razorpay for the actual payment state, rechecks amount, currency, and capture, then uses the same purchase identity to fulfil once.
+
+25
+00:03:53,250 --> 00:04:01,000
+One service guards four boundaries: money, reconciliation, idempotency, and webhooks. Each preserves the same intent.
+
+26
+00:04:01,000 --> 00:04:11,250
+Now test end to end. Razorpay shows broken code produced two rupees; RazorProof's integer boundary produced exactly two rupees and one paisa.
+
+27
+00:04:11,250 --> 00:04:20,550
+Repeat across currencies. Razorpay contains exact and corrupted yen and dinar orders, so both scale errors are inspectable.
+
+28
+00:04:20,550 --> 00:04:28,000
+Captured and refunded states stay visible, linked to request, provider record, and decision.
+
+29
+00:04:28,000 --> 00:04:35,750
+Now Alice asks two rupees and one paisa; Bob pays that; fulfilment runs once.
+
+30
+00:04:35,750 --> 00:04:42,983
+That is RazorProof: the meaning Alice sets at the beginning is exactly the meaning Bob pays at the end.

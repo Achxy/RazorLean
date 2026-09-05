@@ -1,0 +1,48 @@
+{
+  "created_at": "2026-09-03T10:51:15.442083+00:00",
+  "source": "https://registry.npmjs.org",
+  "packages": {
+    "generated_cordova_and_ionic": {
+      "package": "com.nicholaswilliams.nicepay.razorpay",
+      "http_status": 404,
+      "exists": false
+    },
+    "generated_capacitor": {
+      "package": "cordova-plugin-razorpay",
+      "http_status": 200,
+      "exists": true,
+      "version": "0.3.5",
+      "description": "Empty package.",
+      "repository": "",
+      "maintainer_names": [
+        "space-do"
+      ],
+      "unpacked_size": 179,
+      "file_count": 2
+    },
+    "razorpay_official_control": {
+      "package": "com.razorpay.cordova",
+      "http_status": 200,
+      "exists": true,
+      "version": "1.4.15",
+      "description": "Cordova/Phonegap bindings for Razorpay's Mobile SDKs",
+      "repository": "git+https://github.com/razorpay/razorpay-cordova.git",
+      "maintainer_names": [
+        "captn3m0",
+        "kamleshchandnani",
+        "pronav",
+        "razorpay-dev",
+        "sumedht",
+        "vivek_shindhe9604"
+      ],
+      "unpacked_size": 46199,
+      "file_count": 22
+    }
+  },
+  "checks": {
+    "cordova_and_ionic_dependency_missing": true,
+    "capacitor_dependency_is_empty_package": true,
+    "capacitor_dependency_not_official_repo": true,
+    "official_control_owned_and_linked_to_razorpay": true
+  }
+}

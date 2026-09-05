@@ -1,0 +1,381 @@
+{
+  "created_at": "2026-09-03T09:31:04.946792+00:00",
+  "evidence_scope": "razorpay-test-mode-signed-webhooks",
+  "real_money": false,
+  "redaction": "raw bodies, signatures, headers, provider IDs, contact data, and secret omitted",
+  "event_counts": {
+    "payment.authorized": 2,
+    "payment.captured": 2,
+    "payment.failed": 2,
+    "payment_link.paid": 2,
+    "refund.created": 7,
+    "refund.processed": 7
+  },
+  "literal_non_ascii_observations": [
+    {
+      "event": "payment_link.paid",
+      "raw_body_sha256": "098dee525dc1926958595bc6ced0ca034b5f680767ca8e5d057e528ed7a4e24c",
+      "raw_body_bytes": 2218,
+      "signature_valid_at_capture": true,
+      "exact_raw_bytes_match_provider_signature": true,
+      "utf8_roundtrip_matches_provider_signature": true,
+      "dotnet_ascii_substitution_matches_provider_signature": false,
+      "ascii_substitution_changes_bytes": true,
+      "non_ascii_json_paths": [
+        "$.payload.order.entity.notes.unicode_probe",
+        "$.payload.payment.entity.notes.unicode_probe",
+        "$.payload.payment_link.entity.description",
+        "$.payload.payment_link.entity.notes.unicode_probe"
+      ],
+      "non_ascii_codepoints": [
+        "U+0D02",
+        "U+0D2E",
+        "U+0D2F",
+        "U+0D32",
+        "U+0D33",
+        "U+0D3E",
+        "U+20B9"
+      ]
+    },
+    {
+      "event": "refund.created",
+      "raw_body_sha256": "8e10e4571be26f638e5dc08cb758da8a105bd0c2c85d850768f211bacc518e7a",
+      "raw_body_bytes": 1790,
+      "signature_valid_at_capture": true,
+      "exact_raw_bytes_match_provider_signature": true,
+      "utf8_roundtrip_matches_provider_signature": true,
+      "dotnet_ascii_substitution_matches_provider_signature": false,
+      "ascii_substitution_changes_bytes": true,
+      "non_ascii_json_paths": [
+        "$.payload.payment.entity.notes.unicode_probe"
+      ],
+      "non_ascii_codepoints": [
+        "U+0D02",
+        "U+0D2E",
+        "U+0D2F",
+        "U+0D32",
+        "U+0D33",
+        "U+0D3E",
+        "U+20B9"
+      ]
+    },
+    {
+      "event": "refund.processed",
+      "raw_body_sha256": "d305bcaba499f9bc6b040773483da502a2958627766e100e6fd85777c7580df7",
+      "raw_body_bytes": 1792,
+      "signature_valid_at_capture": true,
+      "exact_raw_bytes_match_provider_signature": true,
+      "utf8_roundtrip_matches_provider_signature": true,
+      "dotnet_ascii_substitution_matches_provider_signature": false,
+      "ascii_substitution_changes_bytes": true,
+      "non_ascii_json_paths": [
+        "$.payload.payment.entity.notes.unicode_probe"
+      ],
+      "non_ascii_codepoints": [
+        "U+0D02",
+        "U+0D2E",
+        "U+0D2F",
+        "U+0D32",
+        "U+0D33",
+        "U+0D3E",
+        "U+20B9"
+      ]
+    },
+    {
+      "event": "payment_link.paid",
+      "raw_body_sha256": "7261181ef8d2ed732d6b93a85eb98016f36fdbcecbc3d358e06a2bcc09cd90b1",
+      "raw_body_bytes": 2210,
+      "signature_valid_at_capture": true,
+      "exact_raw_bytes_match_provider_signature": true,
+      "utf8_roundtrip_matches_provider_signature": true,
+      "dotnet_ascii_substitution_matches_provider_signature": false,
+      "ascii_substitution_changes_bytes": true,
+      "non_ascii_json_paths": [
+        "$.payload.order.entity.notes.unicode_probe",
+        "$.payload.payment.entity.notes.unicode_probe",
+        "$.payload.payment_link.entity.description",
+        "$.payload.payment_link.entity.notes.unicode_probe"
+      ],
+      "non_ascii_codepoints": [
+        "U+0D02",
+        "U+0D2E",
+        "U+0D2F",
+        "U+0D32",
+        "U+0D33",
+        "U+0D3E",
+        "U+20B9"
+      ]
+    },
+    {
+      "event": "refund.created",
+      "raw_body_sha256": "d40a6dd52e7bd5603e1e705268c8fd156f3abba3a314f480aec6856b4e6fbe1e",
+      "raw_body_bytes": 1781,
+      "signature_valid_at_capture": true,
+      "exact_raw_bytes_match_provider_signature": true,
+      "utf8_roundtrip_matches_provider_signature": true,
+      "dotnet_ascii_substitution_matches_provider_signature": false,
+      "ascii_substitution_changes_bytes": true,
+      "non_ascii_json_paths": [
+        "$.payload.payment.entity.notes.unicode_probe"
+      ],
+      "non_ascii_codepoints": [
+        "U+0D02",
+        "U+0D2E",
+        "U+0D2F",
+        "U+0D32",
+        "U+0D33",
+        "U+0D3E",
+        "U+20B9"
+      ]
+    },
+    {
+      "event": "refund.processed",
+      "raw_body_sha256": "1c8dac5c70e3fcd3861ff8d8ae9a58dfbf46648c200d7b00296826fd9208e9ac",
+      "raw_body_bytes": 1783,
+      "signature_valid_at_capture": true,
+      "exact_raw_bytes_match_provider_signature": true,
+      "utf8_roundtrip_matches_provider_signature": true,
+      "dotnet_ascii_substitution_matches_provider_signature": false,
+      "ascii_substitution_changes_bytes": true,
+      "non_ascii_json_paths": [
+        "$.payload.payment.entity.notes.unicode_probe"
+      ],
+      "non_ascii_codepoints": [
+        "U+0D02",
+        "U+0D2E",
+        "U+0D2F",
+        "U+0D32",
+        "U+0D33",
+        "U+0D3E",
+        "U+20B9"
+      ]
+    },
+    {
+      "event": "refund.created",
+      "raw_body_sha256": "eb1977c83e28521612abdcdbb8e898493e0aa5fd77014f70e6eb12ed1d4be087",
+      "raw_body_bytes": 1810,
+      "signature_valid_at_capture": true,
+      "exact_raw_bytes_match_provider_signature": true,
+      "utf8_roundtrip_matches_provider_signature": true,
+      "dotnet_ascii_substitution_matches_provider_signature": false,
+      "ascii_substitution_changes_bytes": true,
+      "non_ascii_json_paths": [
+        "$.payload.payment.entity.notes.unicode_probe"
+      ],
+      "non_ascii_codepoints": [
+        "U+0D02",
+        "U+0D2E",
+        "U+0D2F",
+        "U+0D32",
+        "U+0D33",
+        "U+0D3E",
+        "U+20B9"
+      ]
+    },
+    {
+      "event": "refund.processed",
+      "raw_body_sha256": "85b4e961b594a583478cdea64297b7706625f37369d0e55df13cb2c48f7bd124",
+      "raw_body_bytes": 1788,
+      "signature_valid_at_capture": true,
+      "exact_raw_bytes_match_provider_signature": true,
+      "utf8_roundtrip_matches_provider_signature": true,
+      "dotnet_ascii_substitution_matches_provider_signature": false,
+      "ascii_substitution_changes_bytes": true,
+      "non_ascii_json_paths": [
+        "$.payload.payment.entity.notes.unicode_probe"
+      ],
+      "non_ascii_codepoints": [
+        "U+0D02",
+        "U+0D2E",
+        "U+0D2F",
+        "U+0D32",
+        "U+0D33",
+        "U+0D3E",
+        "U+20B9"
+      ]
+    },
+    {
+      "event": "refund.processed",
+      "raw_body_sha256": "0aa2a226ed8150ae00a361a0e0ac598ba97ea7d12c5ff6943f2f39dc987ed713",
+      "raw_body_bytes": 1812,
+      "signature_valid_at_capture": true,
+      "exact_raw_bytes_match_provider_signature": true,
+      "utf8_roundtrip_matches_provider_signature": true,
+      "dotnet_ascii_substitution_matches_provider_signature": false,
+      "ascii_substitution_changes_bytes": true,
+      "non_ascii_json_paths": [
+        "$.payload.payment.entity.notes.unicode_probe"
+      ],
+      "non_ascii_codepoints": [
+        "U+0D02",
+        "U+0D2E",
+        "U+0D2F",
+        "U+0D32",
+        "U+0D33",
+        "U+0D3E",
+        "U+20B9"
+      ]
+    },
+    {
+      "event": "refund.created",
+      "raw_body_sha256": "e2d165bb3bf92fa2eec1c6156643a456e0dd6aa69e6187fc5044cf84592118c2",
+      "raw_body_bytes": 1782,
+      "signature_valid_at_capture": true,
+      "exact_raw_bytes_match_provider_signature": true,
+      "utf8_roundtrip_matches_provider_signature": true,
+      "dotnet_ascii_substitution_matches_provider_signature": false,
+      "ascii_substitution_changes_bytes": true,
+      "non_ascii_json_paths": [
+        "$.payload.payment.entity.notes.unicode_probe"
+      ],
+      "non_ascii_codepoints": [
+        "U+0D02",
+        "U+0D2E",
+        "U+0D2F",
+        "U+0D32",
+        "U+0D33",
+        "U+0D3E",
+        "U+20B9"
+      ]
+    },
+    {
+      "event": "refund.created",
+      "raw_body_sha256": "c61ab5e64791a05f796cb7979c52fb117797c043c79cf5d8fcb996875abb0bba",
+      "raw_body_bytes": 1782,
+      "signature_valid_at_capture": true,
+      "exact_raw_bytes_match_provider_signature": true,
+      "utf8_roundtrip_matches_provider_signature": true,
+      "dotnet_ascii_substitution_matches_provider_signature": false,
+      "ascii_substitution_changes_bytes": true,
+      "non_ascii_json_paths": [
+        "$.payload.payment.entity.notes.unicode_probe"
+      ],
+      "non_ascii_codepoints": [
+        "U+0D02",
+        "U+0D2E",
+        "U+0D2F",
+        "U+0D32",
+        "U+0D33",
+        "U+0D3E",
+        "U+20B9"
+      ]
+    },
+    {
+      "event": "refund.processed",
+      "raw_body_sha256": "be0120cfaa3e5de36b28982ee5c844969297e1a8b267e426b61f96e3eb5075a5",
+      "raw_body_bytes": 1784,
+      "signature_valid_at_capture": true,
+      "exact_raw_bytes_match_provider_signature": true,
+      "utf8_roundtrip_matches_provider_signature": true,
+      "dotnet_ascii_substitution_matches_provider_signature": false,
+      "ascii_substitution_changes_bytes": true,
+      "non_ascii_json_paths": [
+        "$.payload.payment.entity.notes.unicode_probe"
+      ],
+      "non_ascii_codepoints": [
+        "U+0D02",
+        "U+0D2E",
+        "U+0D2F",
+        "U+0D32",
+        "U+0D33",
+        "U+0D3E",
+        "U+20B9"
+      ]
+    },
+    {
+      "event": "refund.processed",
+      "raw_body_sha256": "b0dc9f993603c3fb693997aa67e461aa076f611074d5549911d8093ebc13e088",
+      "raw_body_bytes": 1784,
+      "signature_valid_at_capture": true,
+      "exact_raw_bytes_match_provider_signature": true,
+      "utf8_roundtrip_matches_provider_signature": true,
+      "dotnet_ascii_substitution_matches_provider_signature": false,
+      "ascii_substitution_changes_bytes": true,
+      "non_ascii_json_paths": [
+        "$.payload.payment.entity.notes.unicode_probe"
+      ],
+      "non_ascii_codepoints": [
+        "U+0D02",
+        "U+0D2E",
+        "U+0D2F",
+        "U+0D32",
+        "U+0D33",
+        "U+0D3E",
+        "U+20B9"
+      ]
+    },
+    {
+      "event": "refund.created",
+      "raw_body_sha256": "fd307ec7f1785cbec049186bbf8ec116728db0506acecb256cad10a2b6556695",
+      "raw_body_bytes": 1786,
+      "signature_valid_at_capture": true,
+      "exact_raw_bytes_match_provider_signature": true,
+      "utf8_roundtrip_matches_provider_signature": true,
+      "dotnet_ascii_substitution_matches_provider_signature": false,
+      "ascii_substitution_changes_bytes": true,
+      "non_ascii_json_paths": [
+        "$.payload.payment.entity.notes.unicode_probe"
+      ],
+      "non_ascii_codepoints": [
+        "U+0D02",
+        "U+0D2E",
+        "U+0D2F",
+        "U+0D32",
+        "U+0D33",
+        "U+0D3E",
+        "U+20B9"
+      ]
+    },
+    {
+      "event": "refund.created",
+      "raw_body_sha256": "9302dde6c4c233e64940de839dcdbdd5128ac3d7082ff0e71f5544f10b50aad1",
+      "raw_body_bytes": 1785,
+      "signature_valid_at_capture": true,
+      "exact_raw_bytes_match_provider_signature": true,
+      "utf8_roundtrip_matches_provider_signature": true,
+      "dotnet_ascii_substitution_matches_provider_signature": false,
+      "ascii_substitution_changes_bytes": true,
+      "non_ascii_json_paths": [
+        "$.payload.payment.entity.notes.unicode_probe"
+      ],
+      "non_ascii_codepoints": [
+        "U+0D02",
+        "U+0D2E",
+        "U+0D2F",
+        "U+0D32",
+        "U+0D33",
+        "U+0D3E",
+        "U+20B9"
+      ]
+    },
+    {
+      "event": "refund.processed",
+      "raw_body_sha256": "8d9f02d6f7eddf01f579ee3621fb23685bbb048c35070c3b56fee9317fa67302",
+      "raw_body_bytes": 1787,
+      "signature_valid_at_capture": true,
+      "exact_raw_bytes_match_provider_signature": true,
+      "utf8_roundtrip_matches_provider_signature": true,
+      "dotnet_ascii_substitution_matches_provider_signature": false,
+      "ascii_substitution_changes_bytes": true,
+      "non_ascii_json_paths": [
+        "$.payload.payment.entity.notes.unicode_probe"
+      ],
+      "non_ascii_codepoints": [
+        "U+0D02",
+        "U+0D2E",
+        "U+0D2F",
+        "U+0D32",
+        "U+0D33",
+        "U+0D3E",
+        "U+20B9"
+      ]
+    }
+  ],
+  "checks": {
+    "captures_present": true,
+    "all_capture_signatures_valid": true,
+    "literal_non_ascii_provider_deliveries_present": true,
+    "exact_utf8_verifies_all_literal_non_ascii_deliveries": true,
+    "dotnet_ascii_fails_all_literal_non_ascii_deliveries": true
+  }
+}

@@ -1,0 +1,385 @@
+openapi: 3.1.0
+info:
+  title: RazorProof semantic payment firewall
+  version: 0.1.0
+  description: >-
+    Test-only merchant-side correctness boundary for Razorpay. Provider keys never
+    enter this API. Authenticated routes require a tenant and bearer token; every
+    write additionally requires a durable UUID intent.
+servers:
+  - url: http://127.0.0.1:8787
+    description: Loopback Test Mode service
+tags:
+  - name: system
+  - name: quotes
+  - name: operations
+  - name: evidence
+  - name: webhooks
+paths:
+  /healthz:
+    get:
+      tags: [system]
+      summary: Check database and catalog health
+      operationId: health
+      responses:
+        '200':
+          description: Healthy Test Mode boundary
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [status, mode, catalog_version, operation_count]
+                properties:
+                  status: { const: ok }
+                  mode: { const: test_only }
+                  catalog_version: { type: string }
+                  operation_count: { type: integer, minimum: 1 }
+  /v1/catalog:
+    get:
+      tags: [system]
+      summary: Return the executable operation policy
+      operationId: getCatalog
+      security: [{ tenantBearer: [] }]
+      parameters: [{ $ref: '#/components/parameters/Tenant' }]
+      responses:
+        '200':
+          description: Versioned operation catalog
+          content:
+            application/json:
+              schema: { type: object }
+        '401': { $ref: '#/components/responses/Problem' }
+  /v1/quotes:
+    post:
+      tags: [quotes]
+      summary: Issue a server-valued quote
+      operationId: createQuote
+      security: [{ tenantBearer: [] }]
+      parameters: [{ $ref: '#/components/parameters/Tenant' }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/CreateQuote' }
+      responses:
+        '201':
+          description: Issued quote
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Quote' }
+        '400': { $ref: '#/components/responses/Problem' }
+        '401': { $ref: '#/components/responses/Problem' }
+  /v1/quotes/{quote_id}:
+    get:
+      tags: [quotes]
+      summary: Read one tenant-owned quote
+      operationId: getQuote
+      security: [{ tenantBearer: [] }]
+      parameters:
+        - { $ref: '#/components/parameters/Tenant' }
+        - { $ref: '#/components/parameters/QuoteId' }
+      responses:
+        '200':
+          description: Quote
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Quote' }
+        '404': { $ref: '#/components/responses/Problem' }
+  /v1/quotes/{quote_id}/order:
+    post:
+      tags: [quotes]
+      summary: Create and bind exactly one Razorpay Test Mode order
+      operationId: createBoundOrder
+      security: [{ tenantBearer: [] }]
+      parameters:
+        - { $ref: '#/components/parameters/Tenant' }
+        - { $ref: '#/components/parameters/Intent' }
+        - { $ref: '#/components/parameters/QuoteId' }
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                notes:
+                  type: object
+                  additionalProperties: { type: string }
+      responses:
+        '200':
+          description: Bound quote and redeliverable provider response
+          content:
+            application/json:
+              schema: { type: object }
+        '409': { $ref: '#/components/responses/Problem' }
+        '502': { $ref: '#/components/responses/Problem' }
+        '503': { $ref: '#/components/responses/Problem' }
+  /v1/quotes/{quote_id}/verify:
+    post:
+      tags: [quotes]
+      summary: Verify checkout signature and provider-observed captured state
+      operationId: verifyPayment
+      security: [{ tenantBearer: [] }]
+      parameters:
+        - { $ref: '#/components/parameters/Tenant' }
+        - { $ref: '#/components/parameters/QuoteId' }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [payment_id, signature]
+              properties:
+                payment_id: { type: string, pattern: '^pay_[A-Za-z0-9]+$' }
+                signature: { type: string, pattern: '^[a-fA-F0-9]{64}$' }
+      responses:
+        '200':
+          description: Payment-verified quote
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Quote' }
+        '401': { $ref: '#/components/responses/Problem' }
+        '409': { $ref: '#/components/responses/Problem' }
+  /v1/quotes/{quote_id}/fulfill:
+    post:
+      tags: [quotes]
+      summary: Fulfill a verified quote once
+      operationId: fulfillQuote
+      security: [{ tenantBearer: [] }]
+      parameters:
+        - { $ref: '#/components/parameters/Tenant' }
+        - { $ref: '#/components/parameters/Intent' }
+        - { $ref: '#/components/parameters/QuoteId' }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [reference]
+              properties:
+                reference: { type: string, minLength: 1, maxLength: 128 }
+      responses:
+        '200':
+          description: Fulfilled quote
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Quote' }
+        '409': { $ref: '#/components/responses/Problem' }
+  /v1/operations/{operation}:
+    post:
+      tags: [operations]
+      summary: Execute one catalog-owned provider operation
+      description: >-
+        Reads do not require X-RazorProof-Intent. Writes do. Caller-supplied origins,
+        methods, and API versions are impossible because all three come from policy.
+      operationId: executeOperation
+      security: [{ tenantBearer: [] }]
+      parameters:
+        - { $ref: '#/components/parameters/Tenant' }
+        - name: X-RazorProof-Intent
+          in: header
+          required: false
+          schema: { type: string, pattern: '^[A-Za-z0-9_.-]{1,96}$' }
+        - name: operation
+          in: path
+          required: true
+          schema: { type: string, pattern: '^[a-z0-9_]+$' }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/OperationRequest' }
+      responses:
+        '200':
+          description: Guarded provider response
+          content:
+            application/json:
+              schema: { type: object }
+        '400': { $ref: '#/components/responses/Problem' }
+        '404': { $ref: '#/components/responses/Problem' }
+        '409': { $ref: '#/components/responses/Problem' }
+        '503': { $ref: '#/components/responses/Problem' }
+  /v1/documents:
+    post:
+      tags: [operations]
+      summary: Upload a validated PDF, PNG, or JPEG as one multipart provider part
+      operationId: uploadDocument
+      security: [{ tenantBearer: [] }]
+      parameters:
+        - { $ref: '#/components/parameters/Tenant' }
+        - { $ref: '#/components/parameters/Intent' }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [filename, purpose, content_base64]
+              properties:
+                filename: { type: string, maxLength: 255 }
+                purpose: { type: string, pattern: '^[a-z_]{1,64}$' }
+                content_base64: { type: string, contentEncoding: base64 }
+      responses:
+        '200': { description: Provider document response }
+        '400': { $ref: '#/components/responses/Problem' }
+        '409': { $ref: '#/components/responses/Problem' }
+  /v1/evidence:
+    get:
+      tags: [evidence]
+      summary: Read the tenant's latest redacted evidence links
+      operationId: listEvidence
+      security: [{ tenantBearer: [] }]
+      parameters: [{ $ref: '#/components/parameters/Tenant' }]
+      responses:
+        '200':
+          description: Up to 200 newest evidence events
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [events]
+                properties:
+                  events:
+                    type: array
+                    items: { $ref: '#/components/schemas/EvidenceEvent' }
+  /v1/webhooks/razorpay/{tenant_id}:
+    post:
+      tags: [webhooks]
+      summary: Verify and deduplicate a raw Razorpay webhook
+      operationId: receiveWebhook
+      parameters:
+        - name: tenant_id
+          in: path
+          required: true
+          schema: { type: string, pattern: '^[A-Za-z0-9_-]{1,64}$' }
+        - name: X-Razorpay-Signature
+          in: header
+          required: true
+          schema: { type: string, pattern: '^[a-fA-F0-9]{64}$' }
+        - name: X-Razorpay-Event-Id
+          in: header
+          required: true
+          schema: { type: string, minLength: 1, maxLength: 256 }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [event]
+              properties:
+                event: { type: string }
+              additionalProperties: true
+      responses:
+        '200':
+          description: Authenticated event receipt; duplicate is explicit
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [accepted, duplicate]
+                properties:
+                  accepted: { const: true }
+                  duplicate: { type: boolean }
+        '401': { $ref: '#/components/responses/Problem' }
+components:
+  securitySchemes:
+    tenantBearer:
+      type: http
+      scheme: bearer
+      bearerFormat: opaque
+  parameters:
+    Tenant:
+      name: X-RazorProof-Tenant
+      in: header
+      required: true
+      schema: { type: string, pattern: '^[A-Za-z0-9_-]{1,64}$' }
+    Intent:
+      name: X-RazorProof-Intent
+      in: header
+      required: true
+      description: Caller-owned opaque identity bound durably to operation and canonical input.
+      schema: { type: string, pattern: '^[A-Za-z0-9_.-]{1,96}$' }
+    QuoteId:
+      name: quote_id
+      in: path
+      required: true
+      schema: { type: string, pattern: '^quote_[a-f0-9]{32}$' }
+  responses:
+    Problem:
+      description: RFC 7807-style failure
+      content:
+        application/problem+json:
+          schema: { $ref: '#/components/schemas/Problem' }
+  schemas:
+    CreateQuote:
+      type: object
+      additionalProperties: false
+      required: [currency, lines]
+      properties:
+        currency: { type: string, pattern: '^[A-Z]{3}$' }
+        ttl_seconds: { type: integer, minimum: 60, maximum: 3600, default: 900 }
+        lines:
+          type: array
+          minItems: 1
+          items:
+            type: object
+            additionalProperties: false
+            required: [sku, unit_amount_minor, quantity]
+            properties:
+              sku: { type: string }
+              unit_amount_minor: { type: integer, minimum: 1 }
+              quantity: { type: integer, minimum: 1, maximum: 100000 }
+    Quote:
+      type: object
+      required: [id, tenant_id, lines, money, cart_hash, state, version, expires_at]
+      properties:
+        id: { type: string }
+        tenant_id: { type: string }
+        lines: { type: array, items: { type: object } }
+        money: { type: object }
+        cart_hash: { type: string, pattern: '^[a-f0-9]{64}$' }
+        state: { type: object }
+        version: { type: integer, minimum: 0 }
+        expires_at: { type: string, format: date-time }
+    OperationRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        path:
+          type: object
+          additionalProperties: { type: string }
+        query:
+          type: object
+          additionalProperties:
+            type: array
+            minItems: 1
+            maxItems: 32
+            items: { type: string }
+        body: true
+        quote_id: { type: string }
+    EvidenceEvent:
+      type: object
+      required: [id, tenant_id, kind, operation, subject_fingerprint, payload_hash, chain_hash, occurred_at]
+      properties:
+        id: { type: string, format: uuid }
+        tenant_id: { type: string }
+        kind: { type: string }
+        operation: { type: string }
+        subject_fingerprint: { type: string }
+        payload_hash: { type: string }
+        previous_hash: { type: [string, 'null'] }
+        chain_hash: { type: string }
+        occurred_at: { type: string, format: date-time }
+    Problem:
+      type: object
+      required: [type, title, status, code, detail]
+      properties:
+        type: { type: string, format: uri }
+        title: { type: string }
+        status: { type: integer }
+        code: { type: string }
+        detail: { type: string }

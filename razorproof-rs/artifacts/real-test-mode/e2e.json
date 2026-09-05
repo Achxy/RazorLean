@@ -1,0 +1,25 @@
+{
+  "observed_at": "2026-09-04",
+  "mode": "test",
+  "claim": "real_provider_order_created_through_razorproof",
+  "quote_id": "quote_01a06ad09fbe7f31a5e48aae3165adf0",
+  "amount": 201,
+  "currency": "INR",
+  "provider_order_id": "order_TXq3ismYFdisza",
+  "provider_status": "created",
+  "binding": {
+    "quote_id_in_notes": true,
+    "cart_hash_in_notes": true
+  },
+  "evidence": {
+    "events_verified": 4,
+    "chain_head": "cae406c83021d5e39bea0d778f1af05e3d7af4326f7f139f2fb2354a0288372f"
+  },
+  "not_claimed": [
+    "captured_payment",
+    "refund_movement",
+    "settlement",
+    "live_mode",
+    "dynamic_coverage_of_all_catalog_operations"
+  ]
+}

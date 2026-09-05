@@ -1,0 +1,37 @@
+name: correctness boundary
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install pinned Rust toolchain
+        run: rustup toolchain install 1.96.0 --profile minimal --component rustfmt,clippy
+      - name: Format
+        run: cargo +1.96.0 fmt --all -- --check
+      - name: Lint
+        run: cargo +1.96.0 clippy --workspace --all-targets --all-features -- -D warnings
+      - name: Test
+        run: cargo +1.96.0 test --locked --workspace --all-targets
+      - name: Build release artifact
+        run: cargo +1.96.0 build --locked --release -p razorproof-cli
+      - name: Fetch pinned official MCP source
+        run: |
+          git clone --filter=blob:none https://github.com/razorpay/razorpay-mcp-server.git /tmp/razorpay-mcp-server
+          git -C /tmp/razorpay-mcp-server checkout 7950d51d118ca164c32b7cf0cfaa14f34f24849f
+      - name: Reject operation drift
+        run: cargo +1.96.0 run --locked -q -p razorproof-cli -- coverage --source /tmp/razorpay-mcp-server
+      - name: Upload executable research artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: razorproof-research
+          path: artifacts/
