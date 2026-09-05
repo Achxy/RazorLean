@@ -90,4 +90,4 @@ Show the event count and chain head, then alter a copied event fixture and show 
 
 ## Failure-safe fallback
 
-If network access is unavailable, do not imply a live call. Use `artifacts/real-test-mode/e2e.md` as the prior provider-observed receipt, run `self-test`, run the scanner, and verify the persisted chain locally. The distinction between live, previously observed, source-bound, and simulated evidence is part of the product.
+If network access is unavailable, do not imply a live call. Use `artifacts/real-test-mode/e2e.json` as the prior provider-observed receipt, run `self-test`, run the scanner, and verify the persisted chain locally. The distinction between live, previously observed, source-bound, and simulated evidence is part of the product.

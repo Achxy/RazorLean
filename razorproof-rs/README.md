@@ -33,7 +33,7 @@ The current build has a versioned policy for **113 operations across 20 surfaces
 | Captured payment and fulfillment | Not yet exercised | Needs a Test Mode checkout completion |
 | All 113 endpoint families | Policy-covered, not all exercised | Some need product entitlements or partner access |
 
-See [the real Test Mode receipt](artifacts/real-test-mode/e2e.md), [the conformance report](artifacts/conformance/scan.md), and [the claim ledger](research/report-source.md).
+See the machine-readable [Test Mode receipt](artifacts/real-test-mode/e2e.json), [conformance evidence](artifacts/conformance/scan.json), and the public [interactive investigation](https://achxy.github.io/RazorLean/).
 
 ## Architecture
 

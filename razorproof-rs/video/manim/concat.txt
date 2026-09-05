@@ -1,8 +1,0 @@
-file 'media/videos/master_video_3b1b/1080p60/OpeningProof.mp4'
-file 'media/videos/master_video_3b1b/1080p60/LostCoordinate.mp4'
-file 'media/videos/master_video_3b1b/1080p60/InvariantScanner.mp4'
-file 'media/videos/master_video_3b1b/1080p60/BoundaryFailures.mp4'
-file 'media/videos/master_video_3b1b/1080p60/FailureChains.mp4'
-file 'media/videos/master_video_3b1b/1080p60/SemanticFirewall.mp4'
-file 'media/videos/master_video_3b1b/1080p60/ProviderEvidence.mp4'
-file 'media/videos/master_video_3b1b/1080p60/FinalProof.mp4'
