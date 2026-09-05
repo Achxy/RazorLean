@@ -88,6 +88,8 @@ enum Command {
 }
 
 #[derive(Debug, Args)]
+// The shared `key_` prefix mirrors Razorpay's credential vocabulary and CLI flags.
+#[allow(clippy::struct_field_names)]
 struct CredentialOptions {
     /// Razorpay dashboard CSV export; safer than command-line secrets.
     #[arg(long, env = "RAZORPROOF_KEY_CSV")]

@@ -97,33 +97,30 @@ impl ScanReport {
                 .map_or("no source location".to_owned(), |item| {
                     format!("{}:{}", item.path, item.line)
                 });
-            writeln!(
+            let _ = writeln!(
                 output,
                 "| `{}` | `{:?}` | `{:?}` | {} |",
                 finding.id, finding.severity, finding.claim_kind, location
-            )
-            .expect("writing to a String cannot fail");
+            );
         }
         output.push_str("\n## Remediations\n\n");
         for finding in &self.findings {
-            write!(
+            let _ = write!(
                 output,
                 "### {}\n\n{}\n\nInvariant: {}\n\nFix: {}\n\n",
                 finding.id, finding.title, finding.invariant, finding.remediation
-            )
-            .expect("writing to a String cannot fail");
+            );
         }
         output.push_str("\n## Compositional failure chains\n\n");
         for chain in &self.chains {
-            write!(
+            let _ = write!(
                 output,
                 "### {}\n\n{}\n\nComponents: `{}`\n\nDemonstration: {}\n\n",
                 chain.id,
                 chain.consequence,
                 chain.component_findings.join("`, `"),
                 chain.demonstration
-            )
-            .expect("writing to a String cannot fail");
+            );
         }
         output
     }

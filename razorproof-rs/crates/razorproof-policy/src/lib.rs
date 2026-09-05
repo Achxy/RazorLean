@@ -451,7 +451,7 @@ mod tests {
             catalog
                 .validate_request(
                     "create_order",
-                    &serde_json::json!({"amount": 295991, "currency": "KWD"}),
+                    &serde_json::json!({"amount": 295_991, "currency": "KWD"}),
                 )
                 .is_err()
         );
@@ -497,7 +497,7 @@ mod tests {
                         "plan_id": "plan_example",
                         "addons": [
                             {"item": {"amount": 1000, "currency": "INR"}},
-                            {"item": {"amount": 295990, "currency": "KWD"}}
+                            {"item": {"amount": 295_990, "currency": "KWD"}}
                         ]
                     }),
                 )
@@ -509,7 +509,7 @@ mod tests {
                     "create_subscription",
                     &serde_json::json!({
                         "plan_id": "plan_example",
-                        "addons": [{"item": {"amount": 295991, "currency": "KWD"}}]
+                        "addons": [{"item": {"amount": 295_991, "currency": "KWD"}}]
                     }),
                 )
                 .is_err()

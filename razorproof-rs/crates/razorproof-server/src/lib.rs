@@ -737,7 +737,7 @@ async fn list_evidence(
     Ok(Json(json!({"events": events})))
 }
 
-#[allow(clippy::too_many_arguments)]
+#[allow(clippy::too_many_arguments, clippy::too_many_lines)]
 async fn execute_guarded(
     state: &AppState,
     tenant_id: &TenantId,
@@ -757,7 +757,7 @@ async fn execute_guarded(
         enforce_quote_binding(
             quote,
             &validated.operation.money_fields,
-            &validated.operation.currency_field,
+            validated.operation.currency_field.as_deref(),
             &body,
         )?;
     }
@@ -890,7 +890,7 @@ async fn execute_guarded(
 fn enforce_quote_binding(
     quote: Option<&Quote>,
     money_fields: &[String],
-    currency_field: &Option<String>,
+    currency_field: Option<&str>,
     body: &Value,
 ) -> Result<(), ApiError> {
     let quote = quote
@@ -951,7 +951,7 @@ fn authenticate<'a>(
         .strip_prefix("Bearer ")
         .ok_or_else(|| ApiError::unauthorized("authentication_failed"))?;
     let expected = runtime.gateway_token.expose_secret().as_bytes();
-    let valid = token.as_bytes().len() == expected.len() && token.as_bytes().ct_eq(expected).into();
+    let valid = token.len() == expected.len() && token.as_bytes().ct_eq(expected).into();
     if !valid {
         return Err(ApiError::unauthorized("authentication_failed"));
     }
@@ -1022,7 +1022,7 @@ fn ensure_provider_success(response: &ProviderResponse) -> Result<(), ApiError> 
 #[derive(Debug, Serialize)]
 struct Problem {
     #[serde(rename = "type")]
-    problem_type: String,
+    type_uri: String,
     title: String,
     status: u16,
     code: String,
@@ -1112,7 +1112,7 @@ impl IntoResponse for ApiError {
             .unwrap_or("Request failed")
             .to_owned();
         let body = Problem {
-            problem_type: format!("https://razorproof.dev/problems/{}", self.code),
+            type_uri: format!("https://razorproof.dev/problems/{}", self.code),
             title,
             status: self.status.as_u16(),
             code: self.code,
