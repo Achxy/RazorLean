@@ -1,0 +1,46 @@
+# Copyright (c) 2026 Achyuth Jayadevan <achyuth@jayadevan.in>
+# SPDX-License-Identifier: MIT
+# Licensed under the MIT License. See LICENSE in the repository root.
+
+name: correctness boundary
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install pinned Rust toolchain
+        run: rustup toolchain install 1.96.0 --profile minimal --component rustfmt,clippy
+      - name: Format
+        run: cargo +1.96.0 fmt --manifest-path razorproof-rs/Cargo.toml --all -- --check
+      - name: Lint
+        run: cargo +1.96.0 clippy --manifest-path razorproof-rs/Cargo.toml --workspace --all-targets --all-features -- -D warnings
+      - name: Test Rust
+        run: cargo +1.96.0 test --manifest-path razorproof-rs/Cargo.toml --locked --workspace --all-targets
+      - name: Build release artifact
+        run: cargo +1.96.0 build --manifest-path razorproof-rs/Cargo.toml --locked --release -p razorproof-cli
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Test Python
+        run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - name: Fetch pinned official MCP source
+        run: |
+          git clone --filter=blob:none https://github.com/razorpay/razorpay-mcp-server.git /tmp/razorpay-mcp-server
+          git -C /tmp/razorpay-mcp-server checkout 7950d51d118ca164c32b7cf0cfaa14f34f24849f
+      - name: Reject operation drift
+        run: cargo +1.96.0 run --manifest-path razorproof-rs/Cargo.toml --locked -q -p razorproof-cli -- coverage --source /tmp/razorpay-mcp-server
+      - name: Upload executable research artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: razorproof-research
+          path: razorproof-rs/artifacts/
