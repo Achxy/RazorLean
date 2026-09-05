@@ -20,6 +20,8 @@ __pycache__/
 venv/
 target/
 node_modules/
+site/dist/
+*.tsbuildinfo
 .razorproof/
 *.db
 *.db-shm
@@ -34,4 +36,3 @@ node_modules/
 rzp-key.csv
 .impeccable.md
 **/assets/razorproof-control-room.png
-!/artifacts/INDEX.md

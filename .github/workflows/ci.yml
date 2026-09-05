@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Install pinned Rust toolchain
         run: rustup toolchain install 1.96.0 --profile minimal --component rustfmt,clippy
       - name: Format
@@ -27,7 +27,7 @@ jobs:
         run: cargo +1.96.0 test --manifest-path razorproof-rs/Cargo.toml --locked --workspace --all-targets
       - name: Build release artifact
         run: cargo +1.96.0 build --manifest-path razorproof-rs/Cargo.toml --locked --release -p razorproof-cli
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.13"
       - name: Test Python
@@ -40,7 +40,7 @@ jobs:
         run: cargo +1.96.0 run --manifest-path razorproof-rs/Cargo.toml --locked -q -p razorproof-cli -- coverage --source /tmp/razorpay-mcp-server
       - name: Upload executable research artifacts
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: razorproof-research
           path: razorproof-rs/artifacts/
