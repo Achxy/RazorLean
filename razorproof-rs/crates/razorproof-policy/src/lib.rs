@@ -1,4 +1,4 @@
-#![doc = "Policy catalog and semantic request validation for RazorProof."]
+#![doc = "Policy catalog and semantic request validation for `RazorProof`."]
 // Copyright (c) 2026 Achyuth Jayadevan <achyuth@jayadevan.in>
 // SPDX-License-Identifier: MIT
 // Licensed under the MIT License. See LICENSE in the repository root.

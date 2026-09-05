@@ -1,4 +1,4 @@
-#![doc = "RazorProof command-line control plane."]
+#![doc = "`RazorProof` command-line control plane."]
 // Copyright (c) 2026 Achyuth Jayadevan <achyuth@jayadevan.in>
 // SPDX-License-Identifier: MIT
 // Licensed under the MIT License. See LICENSE in the repository root.
