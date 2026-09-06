@@ -456,13 +456,13 @@ figcaption {
   }
 }
 .github-snippet {
-  color-scheme: light;
+  color-scheme: dark;
   margin: 1.7rem 0;
-  border: 1px solid #d1d9e0;
+  border: 1px solid #30363d;
   border-radius: 6px;
   overflow: hidden;
-  background: #ffffff;
-  color: #1f2328;
+  background: #0d1117;
+  color: #c9d1d9;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 .github-snippet figcaption {
@@ -470,12 +470,12 @@ figcaption {
   flex-direction: column;
   gap: 8px;
   padding: 12px 16px;
-  border-bottom: 1px solid #d1d9e0;
-  background: #f6f8fa;
+  border-bottom: 1px solid #30363d;
+  background: #161b22;
   font-size: 12px;
 }
 .github-snippet a {
-  color: #0969da;
+  color: #58a6ff;
 }
 .github-snippet figcaption a {
   display: flex;
@@ -487,11 +487,11 @@ figcaption {
 }
 .github-snippet figcaption svg {
   flex-shrink: 0;
-  color: #1f2328;
+  color: #c9d1d9;
 }
 .github-snippet figcaption span {
   overflow-wrap: anywhere;
-  color: #59636e;
+  color: #8b949e;
 }
 .github-code-scroll {
   overflow-x: auto;
@@ -524,7 +524,7 @@ figcaption {
   flex: 0 0 56px;
   text-align: right;
   padding-right: 16px;
-  color: #59636e;
+  color: #8b949e;
   text-decoration: none;
   user-select: none;
 }
@@ -532,13 +532,13 @@ figcaption {
   text-decoration: underline;
 }
 .source-highlight {
-  background: #fff8c5;
+  background: #bb800926;
 }
 .github-snippet footer {
   padding: 10px 16px;
-  border-top: 1px solid #d1d9e0;
-  background: #f6f8fa;
-  color: #59636e;
+  border-top: 1px solid #30363d;
+  background: #161b22;
+  color: #8b949e;
   font-size: 12px;
 }
 .github-snippet > p {

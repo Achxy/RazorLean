@@ -9,7 +9,7 @@ import javascript from "highlight.js/lib/languages/javascript";
 import csharp from "highlight.js/lib/languages/csharp";
 import kotlin from "highlight.js/lib/languages/kotlin";
 import { MarkGithubIcon, LinkExternalIcon } from "@primer/octicons-react";
-import "highlight.js/styles/github.css";
+import "highlight.js/styles/github-dark.css";
 
 hljs.registerLanguage("javascript", javascript);
 hljs.registerLanguage("csharp", csharp);
