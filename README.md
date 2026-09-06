@@ -77,7 +77,7 @@ Use the [demo runbook](razorproof-rs/DEMO.md) for the end-to-end flow. Provider 
 | [`razorproof-rs/openapi.yaml`](razorproof-rs/openapi.yaml) | HTTP contract |
 | [`src/razorproof/`](src/razorproof/) | Conformance compiler and reproducible probes |
 | [`artifacts/`](artifacts/) | Sanitized machine-readable evidence |
-| [`site/`](site/) | Interactive GitHub Pages investigation, built with Razorpay Blade |
+| [`site/`](site/) | Interactive first-principles technical essay for GitHub Pages |
 
 ## License
 

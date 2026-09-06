@@ -6,12 +6,16 @@
 
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { BladeProvider } from "@razorpay/blade/components";
-import { bladeTheme } from "@razorpay/blade/tokens";
-import "@razorpay/blade/fonts.css";
+import "@fontsource/inter/latin-400.css";
+import "@fontsource/inter/latin-500.css";
+import "@fontsource/source-serif-4/latin-400.css";
+import "@fontsource/source-serif-4/latin-400-italic.css";
+import "@fontsource/source-serif-4/latin-600.css";
+import "@fontsource/jetbrains-mono/latin-400.css";
 import "./styles.css";
+import "./mobile.css";
 import { App } from "./App";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.StrictMode><BladeProvider themeTokens={bladeTheme} colorScheme="light"><App /></BladeProvider></React.StrictMode>,
+  <React.StrictMode><App /></React.StrictMode>,
 );
