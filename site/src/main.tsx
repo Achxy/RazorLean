@@ -13,7 +13,6 @@ import "@fontsource/source-serif-4/latin-400-italic.css";
 import "@fontsource/source-serif-4/latin-600.css";
 import "@fontsource/jetbrains-mono/latin-400.css";
 import "./styles.css";
-import "./mobile.css";
 import { App } from "./App";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
