@@ -1,0 +1,499 @@
+/*
+ * Copyright (c) 2026 Achyuth Jayadevan <achyuth@jayadevan.in>
+ * SPDX-License-Identifier: MIT
+ * Licensed under the MIT License. See LICENSE in the repository root.
+ */
+.money-chapter {
+  --paper: #f4f3ed;
+  --ink: #353a35;
+  --quiet: #666f62;
+  --line: #ced2c7;
+  --rust: #a84e3f;
+  --leaf: #37765f;
+  color-scheme: light;
+  color: var(--ink);
+  background: var(--paper);
+  width: calc(100% + 96px);
+  margin: -2.2rem -48px 2rem;
+  padding: 48px;
+}
+.money-chapter a {
+  color: #386453;
+}
+.money-chapter a:hover {
+  color: #244836;
+}
+.chapter-opening,
+.chapter-prose {
+  max-width: 660px;
+  margin: 0 auto;
+}
+.chapter-opening h1 {
+  font-size: clamp(26px, 3.5vw, 34px);
+  font-weight: 400;
+  letter-spacing: -0.025em;
+  margin: 0.5rem 0 1.2rem;
+}
+.chapter-eyebrow {
+  font-size: 10px !important;
+  letter-spacing: 0.14em;
+  color: var(--quiet);
+  margin: 0;
+}
+.chapter-opening em {
+  font-style: normal;
+  color: var(--rust);
+}
+.chapter-prose {
+  margin-top: 3rem;
+}
+.chapter-prose h2 {
+  font-size: 25px;
+  font-weight: 400;
+  margin-bottom: 1rem;
+}
+.money-chapter p {
+  font-size: 17px;
+  line-height: 1.75;
+}
+.microscope-instrument {
+  margin: 2.5rem 0 3rem;
+}
+.price-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 25px;
+}
+.price-controls label {
+  display: grid;
+  gap: 5px;
+  font-size: 13px;
+  color: var(--quiet);
+}
+.price-input {
+  display: flex;
+  align-items: baseline;
+  border-bottom: 1px solid #87947e;
+  color: var(--ink);
+  gap: 6px;
+}
+.price-input > span {
+  font-size: 27px;
+}
+.price-input input {
+  color: var(--ink);
+  background: none;
+  border: 0;
+  width: 135px;
+  padding: 4px 0;
+  font:
+    32px/1.3 "Source Serif 4",
+    serif;
+  font-variant-numeric: tabular-nums;
+}
+.price-presets {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+.price-presets > span {
+  width: 100%;
+  text-align: right;
+  font-size: 12px;
+  color: var(--quiet);
+  margin-bottom: 6px;
+}
+.money-chapter button {
+  cursor: pointer;
+  background: transparent;
+  border: 1px solid transparent;
+  color: inherit;
+  padding: 8px 12px;
+  min-height: 38px;
+  border-radius: 3px;
+  font:
+    14px "Source Serif 4",
+    serif;
+}
+.money-chapter button:hover {
+  background: #e5e9de;
+}
+.money-chapter button[aria-pressed="true"] {
+  border-color: #8e9c86;
+  background: #e4e9dc;
+}
+.money-chapter input[type="range"] {
+  accent-color: #687e5b;
+  width: 100%;
+  cursor: ew-resize;
+  margin: 12px 0 4px;
+  height: 24px;
+}
+.price-scrubber {
+  display: block;
+  font-size: 12px;
+  color: var(--quiet);
+  margin-top: 1.2rem;
+}
+.numerical-ruler {
+  width: 100%;
+  height: 360px;
+  display: block;
+  touch-action: pan-y;
+  cursor: ew-resize;
+}
+.zoom-control {
+  max-width: 540px;
+  margin: 0 auto;
+}
+.zoom-control > label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  align-items: baseline;
+  gap: 15px;
+}
+.zoom-control output {
+  font-size: 12px;
+  color: var(--quiet);
+  font-variant-numeric: tabular-nums;
+}
+.zoom-control > div {
+  display: flex;
+  justify-content: space-between;
+}
+.zoom-control button {
+  padding: 5px 0;
+  color: var(--quiet);
+  font-size: 12px;
+}
+.money-chapter .microscope-observation {
+  text-align: center;
+  max-width: 640px;
+  margin: 1.5rem auto 0.8rem;
+  min-height: 3.6em;
+  font-style: italic;
+}
+.money-chapter .instrument-note {
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--quiet);
+}
+.microscope-instrument > .instrument-note {
+  text-align: center;
+  max-width: 660px;
+  margin: 0 auto;
+}
+.price-error {
+  color: var(--rust);
+  padding: 2rem 0;
+}
+.binary-disclosure,
+.microscope-source {
+  margin: 2rem auto;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  padding: 1rem 0;
+}
+.binary-disclosure summary,
+.microscope-source summary {
+  cursor: pointer;
+  font-size: 16px;
+}
+.binary-disclosure summary span {
+  float: right;
+  color: var(--quiet);
+  font-size: 12px;
+}
+.binary-cabinet {
+  padding: 1.2rem 0;
+}
+.instrument-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 1rem;
+}
+.decimal-specimen {
+  border-top: 1px solid var(--line);
+  margin: 1.5rem 0;
+  padding-top: 1rem;
+}
+.decimal-specimen > span {
+  display: block;
+  color: var(--quiet);
+  font-size: 12px;
+  margin-bottom: 6px;
+}
+.decimal-specimen output {
+  font-size: clamp(18px, 2.5vw, 24px);
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+  letter-spacing: 0.03em;
+  font-variant-numeric: tabular-nums;
+}
+.bit-ribbon {
+  display: grid;
+  grid-template-columns: repeat(64, minmax(0, 1fr));
+  gap: 2px;
+  padding: 20px 0 10px;
+}
+.bit {
+  font-size: 12px;
+  text-align: center;
+  padding: 12px 0;
+  background: #e8ebe1;
+  color: #7c8773;
+  box-shadow: inset 0 -2px #c8d0be;
+  opacity: 0.35;
+}
+.bit-on {
+  background: #d1daca;
+  color: #33472b;
+}
+.bit-sign {
+  background: #e5d5bb;
+  color: #795c31;
+}
+.bit-exponent {
+  background: #d1dde4;
+  color: #3c637b;
+}
+.bit-selected {
+  opacity: 1;
+}
+.bit-key {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.bit-key button {
+  border-bottom: 2px solid var(--line);
+  border-radius: 0;
+  padding: 7px 0;
+}
+.bit-key .key-sign {
+  border-color: #b5925e;
+}
+.bit-key .key-exponent {
+  border-color: #6e91a9;
+}
+.bit-key .key-fraction {
+  border-color: #7a9368;
+}
+.money-chapter .bit-explanation {
+  font-size: 15px;
+  min-height: 5.2em;
+}
+.conversion-bench,
+.unit-bench {
+  margin: 2rem 0;
+}
+.conversion-operation {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 120px 130px;
+  align-items: center;
+  gap: 20px;
+  min-height: 145px;
+  border-bottom: 1px solid var(--line);
+  padding: 20px 0;
+}
+.conversion-operation > span:first-child {
+  font-size: clamp(18px, 2.5vw, 26px);
+  overflow-wrap: anywhere;
+  font-variant-numeric: tabular-nums;
+}
+.operator {
+  color: var(--quiet);
+  font-size: 14px;
+}
+.conversion-operation output,
+.decimal-conveyor output {
+  font-size: 42px;
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
+}
+.conversion-operation small,
+.decimal-conveyor small {
+  font-size: 14px;
+  display: block;
+  color: var(--quiet);
+}
+.money-preserved {
+  color: var(--leaf);
+}
+.money-changed {
+  color: var(--rust);
+}
+.conversion-verdict {
+  min-height: 3.6em;
+}
+.boundary-line {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  border-top: 1px dashed #a9b29f;
+  padding-top: 10px;
+  margin-top: 1.5rem;
+  font-size: 12px;
+  color: var(--quiet);
+}
+.decimal-conveyor {
+  display: grid;
+  grid-template-columns: 1fr 90px 130px;
+  gap: 25px;
+  align-items: center;
+  min-height: 150px;
+  position: relative;
+  padding: 20px 0;
+}
+.conveyor-price {
+  font-size: 34px;
+  font-variant-numeric: tabular-nums;
+  grid-column: 1;
+}
+.conveyor-price i {
+  font-style: normal;
+  color: var(--rust);
+}
+.conveyor-teeth {
+  grid-column: 1;
+  display: flex;
+  gap: 0;
+  align-items: flex-start;
+  justify-content: space-between;
+  border-top: 1px solid #a1ac96;
+  margin-top: -15px;
+}
+.conveyor-teeth span {
+  width: 1px;
+  background: #acb5a3;
+}
+.conveyor-ratio {
+  grid-column: 2;
+  grid-row: 1 / 3;
+  font-size: 23px;
+  color: var(--quiet);
+}
+.decimal-conveyor output {
+  grid-column: 3;
+  grid-row: 1 / 3;
+}
+.unit-switch {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 15px;
+  padding: 12px 0;
+  cursor: pointer;
+}
+.unit-switch input {
+  accent-color: #687e5b;
+  width: 18px;
+  height: 18px;
+}
+.money-chapter .chapter-credit {
+  font-size: 12px;
+  color: var(--quiet);
+  margin-top: 2.5rem;
+}
+.money-chapter .github-snippet a {
+  color: #58a6ff;
+}
+.money-chapter .github-snippet p {
+  font-size: 13px;
+}
+@media (max-width: 1050px) {
+  .money-chapter {
+    width: calc(100% + 48px);
+    margin-left: -24px;
+    margin-right: -24px;
+    padding: 32px 24px;
+  }
+}
+@media (max-width: 700px) {
+  .money-chapter {
+    width: calc(100% + 32px);
+    margin: -1.5rem -16px 1.5rem;
+    padding: 32px 16px;
+  }
+  .chapter-opening h1 {
+    font-size: 28px;
+  }
+  .money-chapter p {
+    font-size: 16px;
+  }
+  .chapter-prose h2 {
+    font-size: 23px;
+  }
+  .price-controls {
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .price-presets {
+    gap: 2px;
+  }
+  .price-presets > span {
+    max-width: 150px;
+  }
+  .money-chapter button {
+    padding: 7px 9px;
+  }
+  .price-input input {
+    width: 105px;
+    font-size: 28px;
+  }
+  .bit-ribbon {
+    grid-template-columns: repeat(16, minmax(0, 1fr));
+    gap: 4px;
+  }
+  .bit {
+    padding: 7px 0;
+  }
+  .bit-key {
+    gap: 12px;
+  }
+  .binary-disclosure summary span {
+    display: block;
+    float: none;
+    margin: 6px 0 0 18px;
+  }
+  .conversion-operation {
+    grid-template-columns: minmax(0, 1fr) 90px;
+    gap: 12px;
+  }
+  .conversion-operation .operator {
+    grid-column: 1;
+    grid-row: 2;
+  }
+  .conversion-operation output {
+    grid-column: 2;
+    grid-row: 1 / 3;
+  }
+  .conversion-operation > span:first-child {
+    font-size: 19px;
+  }
+  .boundary-line > span:nth-child(2) {
+    display: none;
+  }
+  .decimal-conveyor {
+    grid-template-columns: minmax(0, 1fr) 60px 95px;
+    gap: 14px;
+  }
+  .conveyor-price {
+    font-size: 25px;
+  }
+  .conveyor-ratio {
+    font-size: 18px;
+  }
+  .decimal-conveyor output {
+    font-size: 30px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .money-chapter * {
+    scroll-behavior: auto;
+  }
+}

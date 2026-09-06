@@ -7,7 +7,7 @@ import type { ReactNode } from "react";
 import { MotionConfig } from "motion/react";
 import { chains, gradeLabel } from "./data/evidence";
 import { FieldGuide } from "./field-guide/FieldGuide";
-import { PaymentLab } from "./components/PaymentLab";
+import { MoneyChapter } from "./microscope/MoneyChapter";
 import { RetryLab } from "./components/RetryLab";
 import { BoundaryLab } from "./components/BoundaryLab";
 import { BytesLab } from "./components/BytesLab";
@@ -57,24 +57,7 @@ export function App() {
         </header>
         <div className="scroll-surface">
           <main id="main-content">
-            <div className="title-block">
-              <h1>What happens after “Pay”?</h1>
-              <p>
-                A payment, taken apart. Change the inputs. Follow the messages.
-                Repair the boundary.
-              </p>
-            </div>
-            <p>
-              Alice wants an item from Bob’s store. The price is ¥295. Before
-              anyone pays, Bob’s integration must translate that price into an
-              integer for the order API. Let’s follow that first translation.
-            </p>
-            <PaymentLab />
-            <p>
-              A yen already is the smallest unit. Multiplying ¥295 by 100
-              produces an order for ¥29,500. It is a perfectly ordinary integer.
-              An API accepting it does not know that Bob meant something else.
-            </p>
+            <MoneyChapter />
             <details className="evidence-inline">
               <summary>
                 Compare the model with the recorded Razorpay orders
