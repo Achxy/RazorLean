@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: MIT
  * Licensed under the MIT License. See LICENSE in the repository root.
  */
-import { useMemo, useRef, useState } from "react";
+import { useMemo, useState } from "react";
 import type { ReactNode } from "react";
 import { MotionConfig } from "motion/react";
 import { chains, claimLabel, findings, gradeLabel } from "./data/evidence";
@@ -11,61 +11,17 @@ import { PaymentLab } from "./components/PaymentLab";
 import { RetryLab } from "./components/RetryLab";
 import { BoundaryLab } from "./components/BoundaryLab";
 import { BytesLab } from "./components/BytesLab";
+import { GitHubSnippet } from "./components/GitHubSnippet";
 import "./labs.css";
 
 const asset = (name: string) => `${import.meta.env.BASE_URL}evidence/${name}`;
 
 function EvidencePair() {
-  const dialog = useRef<HTMLDialogElement>(null);
-  const [zoomed, setZoomed] = useState(["", ""]);
-  const shots = [
-    [
-      "github-browser-authored-amount-clip.png",
-      "Generated checkout",
-      "The browser supplies the amount that becomes the provider order.",
-    ],
-    [
-      "github-dotnet-ascii-clip.png",
-      ".NET webhook verifier",
-      "Signed text is re-encoded as ASCII instead of preserving raw UTF-8 bytes.",
-    ],
-    [
-      "github-mobile-empty-signature-clip.png",
-      "Generated mobile verifier",
-      "The success path forwards an empty signature.",
-    ],
-  ];
   return (
-    <>
-      <div className="evidence-grid">
-        {shots.map(([src, title, note]) => (
-          <button
-            key={src}
-            onClick={() => {
-              setZoomed([src, note]);
-              dialog.current?.showModal();
-            }}
-          >
-            <img src={asset(src)} alt={note} />
-            <span>
-              <b>{title}</b>
-              {note}
-            </span>
-          </button>
-        ))}
-      </div>
-      <dialog
-        ref={dialog}
-        className="evidence-dialog"
-        aria-label="Evidence image"
-      >
-        <form method="dialog">
-          <button>Close ×</button>
-        </form>
-        {zoomed[0] && <img src={asset(zoomed[0])} alt={zoomed[1]} />}
-        <p>{zoomed[1]}</p>
-      </dialog>
-    </>
+    <div className="source-embeds">
+      <GitHubSnippet source="checkout" />
+      <GitHubSnippet source="mobile" />
+    </div>
   );
 }
 
@@ -117,7 +73,18 @@ function CaseIndex() {
               .filter((e) => e.source_url)
               .slice(0, 3)
               .map((e, i) => (
-                <a key={i} href={e.source_url} target="_blank" rel="noreferrer">
+                <a
+                  key={i}
+                  href={
+                    e.line &&
+                    e.source_url.includes("github.com/") &&
+                    e.source_url.includes("/blob/")
+                      ? `${e.source_url.split("#")[0]}#L${e.line}`
+                      : e.source_url
+                  }
+                  target="_blank"
+                  rel="noreferrer"
+                >
                   ↗ {e.summary}
                 </a>
               ))}
@@ -230,17 +197,7 @@ export function App() {
                 changing what the developer thinks it says.
               </p>
               <BytesLab />
-              <figure className="source-strip">
-                <img
-                  src={asset("github-dotnet-ascii-clip.png")}
-                  alt="Official .NET verifier source using ASCII encoding"
-                />
-                <figcaption>
-                  The recorded source mismatch: ASCII conversion at a boundary
-                  that needs the original UTF-8 payload. The diagram lets you
-                  inspect the encoding difference; it does not call Razorpay.
-                </figcaption>
-              </figure>
+              <GitHubSnippet source="ascii" />
             </Section>
             <Section
               id="boundary"
@@ -298,9 +255,9 @@ export function App() {
             </Section>
             <Section id="sources" title="Look at the original surface.">
               <p>
-                These clippings show the official source behind the claims. Open
-                a clipping to read it; use the notebook below for source links
-                and the scope of each finding.
+                These excerpts load directly from Razorpay’s official GitHub
+                repositories. Click any line number to inspect it in context.
+                Each excerpt is pinned to the commit used by the investigation.
               </p>
               <EvidencePair />
             </Section>

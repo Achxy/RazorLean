@@ -455,3 +455,72 @@ figcaption {
     gap: 0.8rem 1rem;
   }
 }
+.github-snippet {
+  margin: 1.7rem 0;
+  border: 1px solid #403d33;
+  border-radius: 5px;
+  overflow: hidden;
+}
+.github-snippet figcaption {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem 1rem;
+  padding: 1rem;
+  background: #1c1c18;
+}
+.github-snippet figcaption strong {
+  width: 100%;
+  color: #ddd5c4;
+  font-weight: 400;
+  font-size: 1rem;
+}
+.github-snippet figcaption span {
+  width: 100%;
+  overflow-wrap: anywhere;
+  font-size: 0.8rem;
+  color: #aaa394;
+}
+.github-code-scroll {
+  overflow-x: auto;
+  padding: 0.8rem 0;
+}
+.github-code-scroll pre {
+  margin: 0;
+  width: max-content;
+  min-width: 100%;
+}
+.github-code-scroll code {
+  font:
+    12px/2 "JetBrains Mono",
+    monospace;
+  overflow-wrap: normal;
+}
+.github-code-line {
+  display: flex;
+  padding-right: 1rem;
+}
+.source-line-number {
+  flex: 0 0 4.2rem;
+  text-align: right;
+  padding-right: 1.3rem;
+  color: #a39a86;
+  text-decoration: none;
+  user-select: none;
+}
+.source-line-number:hover {
+  text-decoration: underline;
+}
+.source-highlight {
+  background: #b89b5420;
+  box-shadow: inset 2px 0 #ba9f6b;
+}
+.github-snippet footer {
+  padding: 0.6rem 1rem;
+  border-top: 1px solid #343129;
+  color: #9d9688;
+  font-size: 0.75rem;
+}
+.github-snippet > p {
+  padding: 0 1rem;
+  font-size: 0.9rem;
+}
