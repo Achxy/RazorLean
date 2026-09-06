@@ -21,9 +21,10 @@ test("renders fetched lines with upstream commit-pinned anchors", async () => {
     vi.fn().mockResolvedValue({ ok: true, text: async () => lines.join("\n") }),
   );
   const view = render(<GitHubSnippet source="ascii" />);
-  expect(
-    await view.findByText("var encoding = new ASCIIEncoding();"),
-  ).toBeInTheDocument();
+  expect(await view.findByRole("region")).toHaveTextContent(
+    "var encoding = new ASCIIEncoding();",
+  );
+  expect(view.container.querySelector(".hljs-keyword")).not.toBeNull();
   expect(
     view.getByRole("link", { name: "Open line 135 on GitHub" }),
   ).toHaveAttribute(

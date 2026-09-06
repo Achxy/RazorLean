@@ -4,10 +4,21 @@
  * Licensed under the MIT License. See LICENSE in the repository root.
  */
 import { useEffect, useState } from "react";
+import hljs from "highlight.js/lib/core";
+import javascript from "highlight.js/lib/languages/javascript";
+import csharp from "highlight.js/lib/languages/csharp";
+import kotlin from "highlight.js/lib/languages/kotlin";
+import { MarkGithubIcon, LinkExternalIcon } from "@primer/octicons-react";
+import "highlight.js/styles/github.css";
+
+hljs.registerLanguage("javascript", javascript);
+hljs.registerLanguage("csharp", csharp);
+hljs.registerLanguage("kotlin", kotlin);
 
 const mcpCommit = "7950d51d118ca164c32b7cf0cfaa14f34f24849f";
 export const sourceSnippets = {
   checkout: {
+    language: "javascript",
     repo: "razorpay-mcp-server",
     commit: mcpCommit,
     path: "pkg/razorpay/integrations/frontend_templates.go",
@@ -17,6 +28,7 @@ export const sourceSnippets = {
     title: "The browser supplies the order amount",
   },
   ascii: {
+    language: "csharp",
     repo: "razorpay-dot-net",
     commit: "2cd38a155ec56ea47e879a573a3acb19334c152e",
     path: "src/Utils.cs",
@@ -26,6 +38,7 @@ export const sourceSnippets = {
     title: "The verifier re-encodes text as ASCII",
   },
   mobile: {
+    language: "kotlin",
     repo: "razorpay-mcp-server",
     commit: mcpCommit,
     path: "pkg/razorpay/integrations/mobile.go",
@@ -78,13 +91,13 @@ export function GitHubSnippet({
   return (
     <figure className="github-snippet">
       <figcaption>
-        <strong>{spec.title}</strong>
         <a
           href={`${url}#L${spec.start}-L${spec.end}`}
           target="_blank"
           rel="noreferrer"
         >
-          razorpay/{spec.repo} ↗
+          <MarkGithubIcon size={16} /> razorpay/{spec.repo}{" "}
+          <LinkExternalIcon size={14} />
         </a>
         <span>{spec.path}</span>
       </figcaption>
@@ -96,7 +109,7 @@ export function GitHubSnippet({
           aria-label={`${spec.title}: source code`}
         >
           <pre>
-            <code>
+            <code className="hljs">
               {lines.map((line, index) => {
                 const number = spec.start + index;
                 return (
@@ -113,7 +126,13 @@ export function GitHubSnippet({
                     >
                       {number}
                     </a>
-                    <span>{line.slice(indent) || " "}</span>
+                    <span
+                      dangerouslySetInnerHTML={{
+                        __html: hljs.highlight(line.slice(indent) || " ", {
+                          language: spec.language,
+                        }).value,
+                      }}
+                    />
                     {"\n"}
                   </span>
                 );
@@ -129,7 +148,7 @@ export function GitHubSnippet({
         </p>
       )}
       <footer>
-        Pinned source ·{" "}
+        View on GitHub ·{" "}
         <a
           href={`https://github.com/razorpay/${spec.repo}/commit/${spec.commit}`}
           target="_blank"
