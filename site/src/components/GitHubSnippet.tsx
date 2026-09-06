@@ -8,12 +8,35 @@ import hljs from "highlight.js/lib/core";
 import javascript from "highlight.js/lib/languages/javascript";
 import csharp from "highlight.js/lib/languages/csharp";
 import kotlin from "highlight.js/lib/languages/kotlin";
+import go from "highlight.js/lib/languages/go";
+import python from "highlight.js/lib/languages/python";
+import ruby from "highlight.js/lib/languages/ruby";
+import java from "highlight.js/lib/languages/java";
+import php from "highlight.js/lib/languages/php";
+import plaintext from "highlight.js/lib/languages/plaintext";
 import { MarkGithubIcon, LinkExternalIcon } from "@primer/octicons-react";
 import "highlight.js/styles/github-dark.css";
 
 hljs.registerLanguage("javascript", javascript);
 hljs.registerLanguage("csharp", csharp);
 hljs.registerLanguage("kotlin", kotlin);
+hljs.registerLanguage("go", go);
+hljs.registerLanguage("python", python);
+hljs.registerLanguage("ruby", ruby);
+hljs.registerLanguage("java", java);
+hljs.registerLanguage("php", php);
+hljs.registerLanguage("plaintext", plaintext);
+
+export type SourceExcerpt = {
+  language: string;
+  repo: string;
+  commit: string;
+  path: string;
+  start: number;
+  end: number;
+  highlight: number;
+  title: string;
+};
 
 const mcpCommit = "7950d51d118ca164c32b7cf0cfaa14f34f24849f";
 export const sourceSnippets = {
@@ -49,12 +72,11 @@ export const sourceSnippets = {
   },
 } as const;
 
-export function GitHubSnippet({
-  source,
-}: {
-  source: keyof typeof sourceSnippets;
-}) {
-  const spec = sourceSnippets[source];
+export function GitHubSnippet(
+  props: { source: keyof typeof sourceSnippets } | { excerpt: SourceExcerpt },
+) {
+  const spec =
+    "excerpt" in props ? props.excerpt : sourceSnippets[props.source];
   const [lines, setLines] = useState<string[] | null>(null);
   const [failed, setFailed] = useState(false);
   const url = `https://github.com/razorpay/${spec.repo}/blob/${spec.commit}/${spec.path}`;

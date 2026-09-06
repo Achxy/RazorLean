@@ -3,10 +3,10 @@
  * SPDX-License-Identifier: MIT
  * Licensed under the MIT License. See LICENSE in the repository root.
  */
-import { useMemo, useState } from "react";
 import type { ReactNode } from "react";
 import { MotionConfig } from "motion/react";
-import { chains, claimLabel, findings, gradeLabel } from "./data/evidence";
+import { chains, gradeLabel } from "./data/evidence";
+import { FieldGuide } from "./field-guide/FieldGuide";
 import { PaymentLab } from "./components/PaymentLab";
 import { RetryLab } from "./components/RetryLab";
 import { BoundaryLab } from "./components/BoundaryLab";
@@ -21,76 +21,6 @@ function EvidencePair() {
     <div className="source-embeds">
       <GitHubSnippet source="checkout" />
       <GitHubSnippet source="mobile" />
-    </div>
-  );
-}
-
-function CaseIndex() {
-  const [query, setQuery] = useState("");
-  const filtered = useMemo(
-    () =>
-      findings.filter((f) =>
-        `${f.title} ${f.repo} ${f.surface} ${f.claim_kind}`
-          .toLowerCase()
-          .includes(query.toLowerCase()),
-      ),
-    [query],
-  );
-  return (
-    <div className="case-index" id="cases">
-      <label>
-        <span>Filter by mechanism or surface</span>
-        <input
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder="money, tenant, mobile, webhook…"
-        />
-      </label>
-      <p className="result-count">{filtered.length} matching entries</p>
-      {filtered.map((f) => (
-        <details key={f.id}>
-          <summary>
-            <span className={`sev ${f.severity}`}>{f.severity}</span>
-            <b>{f.title}</b>
-            <small>
-              {f.repo} · {claimLabel[f.claim_kind] ?? f.claim_kind} ·{" "}
-              {gradeLabel[f.level] ?? f.level}
-            </small>
-          </summary>
-          <div>
-            <p>
-              <i>What breaks.</i> {f.impact}
-            </p>
-            <p>
-              <i>Counterexample.</i>{" "}
-              <code>{f.counterexample || "Source contract mismatch"}</code>
-            </p>
-            <p>
-              <i>Remediation, not a claim of shipped coverage.</i>{" "}
-              {f.proposed_fix}
-            </p>
-            {f.evidence
-              .filter((e) => e.source_url)
-              .slice(0, 3)
-              .map((e, i) => (
-                <a
-                  key={i}
-                  href={
-                    e.line &&
-                    e.source_url.includes("github.com/") &&
-                    e.source_url.includes("/blob/")
-                      ? `${e.source_url.split("#")[0]}#L${e.line}`
-                      : e.source_url
-                  }
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  ↗ {e.summary}
-                </a>
-              ))}
-          </div>
-        </details>
-      ))}
     </div>
   );
 }
@@ -261,14 +191,17 @@ export function App() {
               </p>
               <EvidencePair />
             </Section>
-            <Section id="notebook" title="The entire failure notebook">
+            <Section
+              id="notebook"
+              title="An illustrated field guide to the failures"
+            >
               <p>
-                Not every entry is a provider bug. Some are SDK defects, some
-                are integration mistakes, and some are safety gaps in otherwise
-                intentional behaviour. A detector finding is not automatically
-                an implemented fix.
+                Each plate follows one mechanism from intention to failure to
+                correction. Choose a case, play its sequence, then inspect the
+                source and the limits of the evidence. The drawings explain the
+                contracts; they do not send requests or simulate an exploit.
               </p>
-              <CaseIndex />
+              <FieldGuide />
             </Section>
             <Section
               id="implementation"

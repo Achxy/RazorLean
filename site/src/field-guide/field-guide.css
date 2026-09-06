@@ -1,0 +1,309 @@
+/*
+ * Copyright (c) 2026 Achyuth Jayadevan <achyuth@jayadevan.in>
+ * SPDX-License-Identifier: MIT
+ * Licensed under the MIT License. See LICENSE in the repository root.
+ */
+.field-guide {
+  width: min(1160px, calc(100vw - 48px));
+  margin: 2rem 0 0 50%;
+  transform: translateX(-50%);
+  display: grid;
+  grid-template-columns: 235px minmax(0, 1fr);
+  gap: 36px;
+  align-items: start;
+}
+.guide-directory {
+  position: sticky;
+  top: 20px;
+  border-right: 1px solid #39382f;
+  padding-right: 18px;
+}
+.guide-directory label {
+  display: grid;
+  gap: 7px;
+  font:
+    12px/1.5 Inter,
+    sans-serif;
+  color: #b7b0a0;
+  margin-bottom: 16px;
+}
+.guide-directory input,
+.guide-directory select {
+  min-width: 0;
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #4a473c;
+  border-radius: 3px;
+  background: #1c1c18;
+  color: #ddd7c9;
+  font:
+    12px/1.5 Inter,
+    sans-serif;
+}
+.guide-case-list {
+  max-height: min(70vh, 760px);
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+.guide-case-list button {
+  display: flex;
+  width: 100%;
+  text-align: left;
+  gap: 11px;
+  padding: 13px 8px;
+  border: 0;
+  border-bottom: 1px solid #302e26;
+  background: transparent;
+  color: #b5ae9f;
+  cursor: pointer;
+}
+.guide-case-list button[aria-pressed="true"] {
+  background: #2d2b22;
+  color: #eddfbd;
+}
+.guide-case-list button:hover {
+  background: #24231d;
+}
+.guide-case-list button span {
+  color: #8f8269;
+  font:
+    11px/1.6 Inter,
+    sans-serif;
+  min-width: 20px;
+}
+.guide-case-list button b {
+  font:
+    14px/1.45 "Source Serif 4",
+    serif;
+}
+.case-study {
+  min-width: 0;
+  scroll-margin-top: 94px;
+}
+.case-kicker {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px;
+  font:
+    10px/1.5 Inter,
+    sans-serif;
+  color: #b1a38b;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.case-study h3 {
+  font:
+    400 30px/1.2 "Source Serif 4",
+    serif;
+  margin: 18px 0;
+  letter-spacing: -0.025em;
+}
+.case-study .case-story {
+  font-size: 17px;
+  line-height: 1.7;
+  max-width: 760px;
+}
+.case-illustration {
+  margin: 25px 0 0;
+}
+.plate-scroll {
+  overflow-x: auto;
+  background: #e9e2cf;
+  scrollbar-color: #908671 #d9d0ba;
+  scrollbar-width: thin;
+}
+.guide-plate {
+  width: 100%;
+  min-width: 700px;
+  display: block;
+}
+.case-illustration figcaption {
+  display: grid;
+  grid-template-columns: 135px 1fr;
+  gap: 20px;
+  border-bottom: 1px solid #494235;
+  padding: 17px 0;
+  min-height: 85px;
+}
+.case-illustration figcaption > span {
+  color: #c8b08a;
+  font-style: italic;
+  font-size: 14px;
+}
+.case-illustration figcaption p {
+  margin: 0;
+  color: #e1d9ca;
+  font-size: 15px;
+  line-height: 1.6;
+}
+.plate-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  align-items: center;
+  margin: 16px 0 28px;
+}
+.plate-controls button,
+.case-pagination button {
+  border: 1px solid #645944;
+  background: none;
+  color: #d2c5ab;
+  cursor: pointer;
+  font:
+    12px/1.5 Inter,
+    sans-serif;
+  padding: 9px 11px;
+  border-radius: 3px;
+}
+.plate-controls .plate-play {
+  background: #d1bb91;
+  color: #29251d;
+  border-color: #d1bb91;
+}
+.plate-steps {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+.plate-steps button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px;
+  border-color: transparent;
+  color: #aaa08d;
+}
+.plate-steps button[aria-pressed="true"] {
+  color: #ecce91;
+  border-color: #8c7854;
+}
+.plate-steps button span {
+  font-size: 10px;
+}
+.case-explanation {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+}
+.case-explanation h4 {
+  font-size: 16px;
+  font-weight: 400;
+  font-style: italic;
+  margin: 20px 0 8px;
+  color: #cfb997;
+}
+.case-explanation p {
+  font-size: 15px;
+  line-height: 1.75;
+  margin: 0 0 18px;
+  color: #c3bcaf;
+}
+.evidence-bound {
+  border-top: 1px dashed #514938;
+  padding-top: 1px;
+}
+.evidence-bound small {
+  font:
+    10px/1.5 Inter,
+    sans-serif;
+  color: #a69c86;
+}
+.case-source {
+  margin-top: 25px;
+  padding: 16px 0;
+  border-top: 1px solid #3d382d;
+  border-bottom: 1px solid #3d382d;
+}
+.case-source summary {
+  cursor: pointer;
+  color: #c8b08b;
+  font-size: 14px;
+}
+.case-source > p {
+  font-size: 14px;
+}
+.case-source-links a {
+  display: block;
+  font-size: 13px;
+  line-height: 1.6;
+  padding: 7px 0;
+}
+.case-source .case-enforcement {
+  font-size: 12px;
+  color: #a39a86;
+  margin-bottom: 0;
+}
+.case-pagination {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  margin-top: 24px;
+}
+.case-pagination button {
+  border: 0;
+  padding: 8px 0;
+  text-align: left;
+}
+.case-pagination button:last-child {
+  text-align: right;
+}
+.case-pagination button:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+@media (max-width: 950px) {
+  .field-guide {
+    grid-template-columns: minmax(0, 1fr);
+    width: 100%;
+    margin-left: 0;
+    transform: none;
+    gap: 28px;
+  }
+  .guide-directory {
+    position: static;
+    border: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 15px;
+  }
+  .guide-case-list {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    max-height: 185px;
+  }
+  .guide-directory label {
+    margin: 0;
+  }
+}
+@media (max-width: 600px) {
+  .guide-case-list {
+    grid-template-columns: 1fr;
+  }
+  .case-study h3 {
+    font-size: 26px;
+  }
+  .case-explanation {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+  .case-illustration figcaption {
+    grid-template-columns: 1fr;
+    gap: 7px;
+  }
+  .case-illustration::before {
+    content: "Scroll the drawing horizontally ↔";
+    display: block;
+    font-size: 11px;
+    color: #a99c82;
+    padding-bottom: 7px;
+  }
+  .plate-controls {
+    gap: 12px;
+  }
+  .case-pagination button {
+    max-width: 65%;
+  }
+}
